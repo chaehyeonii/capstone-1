@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="find_date">습득 일시</string>
+    <string name="button_chatting">채팅</string>
+    <string name="find_place">습득 장소</string>
+    <string name="storage_state">보관 상태</string>
+    <string name="find_classify">분류 / 색상</string>
+    <string name="button_declare">신고</string>
+    <string name="button_home">홈</string>
+    <string name="button_bus">버스</string>
+    <string name="button_subway">지하철</string>
+    <string name="button_taxi">택시</string>
+    <string name="button_police">경찰청</string>
+    <string name="button_police2">police</string>
+    <string name="button_search">search</string>
+    <string name="button_listview">리스트뷰</string>
+    <string name="button_click">리스트뷰클릭</string>
+</resources>
