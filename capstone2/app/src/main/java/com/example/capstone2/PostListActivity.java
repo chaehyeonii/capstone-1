@@ -1,10 +1,12 @@
 package com.example.capstone2;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -42,6 +44,18 @@ public class PostListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.post_list);
+
+        Button homeButton=findViewById(R.id.homeBtn);
+        homeButton.setOnClickListener(view -> {
+            Intent intent=new Intent(PostListActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
+
+        Button postingButton=findViewById(R.id.postingBtn);
+        postingButton.setOnClickListener(view -> {
+            Intent intent=new Intent(PostListActivity.this, PostingActivity.class);
+            startActivity(intent);
+        });
 
         mTextViewResult = (TextView)findViewById(R.id.textView_main_result);
         mlistView = (ListView) findViewById(R.id.listView_main_list);
