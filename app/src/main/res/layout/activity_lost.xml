@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     //list를 사용할 container 생성
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_container"
