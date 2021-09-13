@@ -14,7 +14,8 @@
         android:layout_marginBottom="412dp"
         android:text="@string/button_taxi"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_subway" />
+        app:layout_constraintStart_toEndOf="@+id/button_subway"
+        android:onClick="onClick_url" />
 
     <Button
         android:id="@+id/button_subway"
@@ -28,7 +29,8 @@
         android:text="@string/button_subway"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_taxi"
-        app:layout_constraintStart_toEndOf="@+id/button_bus" />
+        app:layout_constraintStart_toEndOf="@+id/button_bus"
+        android:onClick="onClick_url" />
 
     <Button
         android:id="@+id/button_bus"
@@ -39,7 +41,8 @@
         android:layout_marginBottom="412dp"
         android:text="@string/button_bus"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:onClick="onClick_url" />
 
     <Button
         android:id="@+id/button_police"
