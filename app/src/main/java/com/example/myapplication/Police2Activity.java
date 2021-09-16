@@ -36,7 +36,9 @@ public class Police2Activity extends Activity{
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
 
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        //GridLayoutManager layoutManager=new GridLayoutManager(this,2);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
 

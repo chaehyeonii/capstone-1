@@ -10,29 +10,13 @@
 
 
         <TextView
-            android:id="@+id/textView1"
-            android:layout_width="200dp"
-            android:layout_height="70dp"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_gravity="center"
-            />
-
-        <TextView
             android:id="@+id/textView2"
-            android:layout_width="311dp"
+            android:layout_width="366dp"
             android:layout_height="338dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:textSize="13sp"
             android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
 
         <ImageView
             android:id="@+id/imageView"

@@ -44,17 +44,18 @@ public class DetailActivity extends Activity {
         setContentView(R.layout.activity_detail);
 
         //edit = (EditText) findViewById(R.id.edit);
-        textView1 = (TextView) findViewById(R.id.textView1);
+        //textView1 = (TextView) findViewById(R.id.textView1);
         textView2 = (TextView) findViewById(R.id.textView2);
-        textView3 = (TextView) findViewById(R.id.textView3);
+        //textView3 = (TextView) findViewById(R.id.textView3);
 
         Intent intent = getIntent(); //1
-        textView1.setText(intent.getStringExtra("TEXT")); //2
+        //textView1.setText(intent.getStringExtra("TEXT")); //2
 
-        id = textView1.getText().toString();
-
+        //id = textView1.getText().toString();
+        id=intent.getStringExtra("TEXT");
         ImageView imageView = (ImageView) findViewById(R.id.imageView);
-        imageget = getXmlURL();
+
+        //imageget = getXmlURL();
         //imageView.setImageResource(R.drawable.flower);
         //Glide.with(this).load(image).override(200,200).fitCenter().into(imageView);
 
@@ -66,7 +67,7 @@ public class DetailActivity extends Activity {
                 // TODO Auto-generated method stub
                 data = getXmlData();//아래 메소드를 호출하여 XML data를 파싱해서 String 객체로 얻어오기\
                 imageget = getXmlURL();
-
+                //Glide.with(getApplicationContext()).load(imageget).override(200,200).error(R.drawable.flower).into(imageView);
 
                 runOnUiThread(new Runnable() {
 
@@ -74,9 +75,9 @@ public class DetailActivity extends Activity {
                     public void run() {
                         // TODO Auto-generated method stub
                         textView2.setText(data); //TextView에 문자열  data 출력
-                        textView3.setText(imageget); //TextView에 문자열  data 출력
-                        imageurl = textView3.getText().toString();
-
+                        //textView3.setText(imageget); //TextView에 문자열  data 출력
+                        //imageurl = textView3.getText().toString();
+                        Glide.with(getApplicationContext()).load(imageget).override(200,200).error(R.drawable.flower).into(imageView);
                     }
                 });
 
@@ -84,8 +85,8 @@ public class DetailActivity extends Activity {
         }).start();
         //Glide로 이미지 표시
 
-        Glide.with(this).load(imageget).override(200,200)
-                .error(R.drawable.flower).into(imageView);
+        //Glide.with(this).load(imageget).override(200,200)
+        //        .error(R.drawable.flower).into(imageView);
 
 
         //imageView.setImageResource(R.drawable.flower);
@@ -143,14 +144,12 @@ public class DetailActivity extends Activity {
                             xpp.next();
                             buffer.append(xpp.getText());//lstPlace 요소의 TEXT 읽어와서 문자열버퍼에 추가
                             buffer.append("\n"); //줄바꿈 문자 추가
-                        } else if (tag.equals("lstFilePathImg")) {
-                            buffer.append("분실물이미지명 : ");
-                            xpp.next();
+                        } /* else if (tag.equals("lstFilePathImg")) {
                             buffer.append(xpp.getText());
                             buffer.append("\n");
                             //image=xpp.getText();
 
-                        } else if (tag.equals("lstHor")) {
+                        } */else if (tag.equals("lstHor")) {
                             buffer.append("분실시간 :");
                             xpp.next();
                             buffer.append(xpp.getText());//cpId
@@ -235,12 +234,7 @@ public class DetailActivity extends Activity {
         } catch (Exception e) {
             // TODO Auto-generated catch blocke.printStackTrace();
         }
-
-        buffer.append("파싱 끝\n");
-
         return buffer.toString();//StringBuffer 문자열 객체 반환
-
-
     }
 
     String getXmlURL() { //이미지 불러오기 위한 주소

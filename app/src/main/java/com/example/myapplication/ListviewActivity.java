@@ -1,9 +1,8 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +25,7 @@ public class ListviewActivity extends AppCompatActivity {
     //발급받은 인증키
     String apiKey="%2Byy%2BAg9TKR9ECCv0yM0FkpCbZUyhIAsutQKN5U%2BzwQLeB6cWr1mrzLwH68caK39fPNG1YDiZGj3uv3AjFg6mVw%3D%3D";
 
-    ListView listView;
+    GridView listView;
     ArrayAdapter adapter;
 
     //bundle 생성
@@ -38,13 +37,11 @@ public class ListviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listview);
 
-        listView=findViewById(R.id.list_view);
+        listView=findViewById(R.id.grid_view);
         adapter= new ArrayAdapter(this,android.R.layout.simple_list_item_1,items);
         //원래 layout을 .xml을 만들어야 하지만 지금은 안드로이드 제공 (android.R.layout.simple_list_item_1)을 사용
         listView.setAdapter(adapter);
-    }
 
-    public void clickBtn(View view) {
         //네트워크를 통해 xml문서 읽어오기
         new Thread(){
             @Override
@@ -60,7 +57,7 @@ public class ListviewActivity extends AppCompatActivity {
 
                 String adress = " http://apis.data.go.kr/1320000/LostGoodsInfoInqireService/getLostGoodsInfoAccToClAreaPd"
                         +"?serviceKey="+apiKey
-                        +"&pageNo=1&numOfRows=20";
+                        +"&pageNo=1&numOfRows=5";
 
                 //주소 뒤 [? key=Value & key = value id= aaa & pw= 1234] 부분이 GET방식
 
