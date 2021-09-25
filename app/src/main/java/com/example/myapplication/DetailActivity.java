@@ -34,7 +34,6 @@ public class DetailActivity extends Activity {
 
     //Intent intent = getIntent();
     String id;
-    String image1 = "https://www.lost112.go.kr/lostnfs/images/sub/img04_no_img.gif";
     String imageget;
     String imageurl;
 

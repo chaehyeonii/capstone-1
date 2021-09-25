@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -51,6 +54,12 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
         holder.lstSbjt.setText(mList.get(position).lstSbjt);
         holder.lstYmd.setText(mList.get(position).lstYmd);
 
+
+        Glide.with(holder.itemView.getContext())
+                .load(mList.get(position).getlstFilePathImg())
+                //.load("https://bit.ly/2V1ipNj")
+                .into(holder.imageView2);
+
         //Click event
 
     }
@@ -67,6 +76,7 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
         public TextView lstPrdtNm;
         public TextView lstSbjt;
         public TextView lstYmd;
+        public ImageView imageView2;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,6 +86,11 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
             lstPrdtNm = itemView.findViewById(R.id.tv_lstPrdtNm);
             lstSbjt = itemView.findViewById(R.id.tv_lstSbjt);
             lstYmd = itemView.findViewById(R.id.tv_lstYmd);
+            imageView2=itemView.findViewById(R.id.imageView2);
+
+            //imageView2.setBackground(new ShapeDrawable(new OvalShape()));
+            //imageView2.setClipToOutline(true);
+
 
             //click
             itemView.setClickable(true);
@@ -97,6 +112,10 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
             });
 
         }
+
+
+
+
     }
 }
 

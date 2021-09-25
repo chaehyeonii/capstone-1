@@ -21,12 +21,13 @@ import java.util.ArrayList;
 
 public class Police2Activity extends Activity{
 
-    final String TAG = "Police2Activity";
     public String dataKey = "%2Byy%2BAg9TKR9ECCv0yM0FkpCbZUyhIAsutQKN5U%2BzwQLeB6cWr1mrzLwH68caK39fPNG1YDiZGj3uv3AjFg6mVw%3D%3D";
     private String requestUrl;
+    private String requestUrl2;
     ArrayList<Police2_Item> list = null;
     Police2_Item item = null;
     RecyclerView recyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +92,106 @@ public class Police2Activity extends Activity{
                             if (parser.getName().equals("lstSbjt")) b_lstSbjt = true;
                             if (parser.getName().equals("lstYmd")) b_lstYmd = true;
                             break;
+
                         case XmlPullParser.TEXT:
                             if(b_atcId){
                                 item.setatcId(parser.getText());
                                 b_atcId = false;
+
+                                StringBuffer image = new StringBuffer();
+                                String queryUrl = "http://apis.data.go.kr/1320000/LostGoodsInfoInqireService/getLostGoodsDetailInfo?"//요청 URL
+                                        + "ATC_ID=" + parser.getText() + "&ServiceKey=" + dataKey;
+
+                                try {
+                                    URL url2 = new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성.
+                                    InputStream is2 = url2.openStream(); //url위치로 입력스트림 연결
+
+                                    XmlPullParserFactory factory2 = XmlPullParserFactory.newInstance();
+                                    XmlPullParser xpp2 = factory2.newPullParser();
+                                    xpp2.setInput(new InputStreamReader(is2, "UTF-8")); //inputstream 으로부터 xml 입력받기
+
+                                    String tag2;
+
+                                    xpp2.next();
+                                    int eventType2 = xpp2.getEventType();
+
+                                    while (eventType2 != XmlPullParser.END_DOCUMENT) {
+
+                                        switch (eventType2) {
+                                            case XmlPullParser.START_DOCUMENT:
+                                                break;
+
+                                            case XmlPullParser.START_TAG:
+                                                tag2 = xpp2.getName();//태그 이름 얻어오기
+
+                                                if (tag2.equals("item")) ;// 첫번째 검색결과
+                                                else if (tag2.equals("lstFilePathImg")) {
+                                                    xpp2.next();
+                                                    image.append(xpp2.getText());
+                                                }
+                                                break;
+
+                                            case XmlPullParser.TEXT:
+                                                break;
+
+                                            case XmlPullParser.END_TAG:
+                                                tag2 = xpp2.getName(); //태그 이름 얻어오기
+
+                                                if (tag2.equals("item")) ;// 첫번째 검색결과종료..줄바꿈
+                                                break;
+                                        }
+                                        eventType2 = xpp2.next();
+                                    }
+
+                                } catch (Exception e) {
+                                    // TODO Auto-generated catch blocke.printStackTrace();
+                                }
+                                item.setlstFilePathImg(image.toString());//StringBuffer 문자열 객체 반환
+
+
+                                //item.setlstFilePathImg("https://bit.ly/2V1ipNj");
+
+                                //------------------------목록 이미지 추가----
+                                /*
+                                requestUrl2 = "http://apis.data.go.kr/1320000/LostGoodsInfoInqireService/getLostGoodsDetailInfo?hserviceKey=" +dataKey+ "&ATC_ID="+parser.getText();
+                                try {
+                                    boolean b_lstFilePathImg = false;
+
+                                    URL url2 = new URL(requestUrl2);
+                                    InputStream is2 = url.openStream();
+                                    XmlPullParserFactory factory2 = XmlPullParserFactory.newInstance();
+                                    XmlPullParser parser2 = factory.newPullParser();
+                                    parser2.setInput(new InputStreamReader(is2, "UTF-8"));
+
+                                    int eventType2 = parser2.getEventType();
+
+                                    while(eventType2 != XmlPullParser.END_DOCUMENT){
+                                        switch (eventType2){
+                                            case XmlPullParser.START_DOCUMENT:
+                                                break;
+                                            case XmlPullParser.END_DOCUMENT:
+                                                break;
+                                            case XmlPullParser.END_TAG:
+                                                if(parser2.getName().equals("item") && item != null)
+                                                    break;
+                                            case XmlPullParser.START_TAG:
+                                                if(parser2.getName().equals("item"))
+                                                    if (parser2.getName().equals("lstFilePathImg")) b_lstFilePathImg = true;
+                                                break;
+                                            case XmlPullParser.TEXT:
+                                                if(b_lstFilePathImg){
+                                                    item.setlstFilePathImg(parser2.getText());
+                                                    b_lstFilePathImg = false;
+                                                }
+                                                break;
+                                        }
+                                        eventType2 = parser2.next();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                */
+
                             } else if(b_lstPlace) {
                                 item.setlstPlace(parser.getText());
                                 b_lstPlace = false;
@@ -108,7 +205,6 @@ public class Police2Activity extends Activity{
                                 item.setlstYmd(parser.getText());
                                 b_lstYmd = false;
                             }
-
                             break;
                     }
                     eventType = parser.next();
@@ -116,8 +212,10 @@ public class Police2Activity extends Activity{
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
             return null;
         }
+
 
         @Override
         protected void onPostExecute(String s) {
