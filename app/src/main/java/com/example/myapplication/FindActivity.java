@@ -1,3 +1,5 @@
+//데이터키 아직 안나와서 수정 안 함!
+
 //추가 해야할 것: 무한 스크롤
 //무한 스크롤: 스크롤 끝에 다다르면 다음 데이터 불러오기
 
@@ -19,7 +21,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class Police2Activity extends Activity{
+public class FindActivity extends Activity{
 
     public String dataKey = "%2Byy%2BAg9TKR9ECCv0yM0FkpCbZUyhIAsutQKN5U%2BzwQLeB6cWr1mrzLwH68caK39fPNG1YDiZGj3uv3AjFg6mVw%3D%3D";
     private String requestUrl;

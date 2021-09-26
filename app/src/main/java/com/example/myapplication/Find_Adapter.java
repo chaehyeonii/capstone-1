@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyViewHolder> {
+public class Find_Adapter extends RecyclerView.Adapter<Find_Adapter.MyViewHolder> {
 
 
     //-------------무한 스크롤을 위한 추가---------------
@@ -24,11 +24,11 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
     //-----------------------------------------------
 
 
-    private ArrayList<Police2_Item> mList;
+    private ArrayList<Find_Item> mList;
     private LayoutInflater mInflate;
     private Context mContext;
 
-    public Police2_Adapter(Context context, ArrayList<Police2_Item> itmes) {
+    public Find_Adapter(Context context, ArrayList<Find_Item> itmes) {
         this.mList = itmes;
         this.mInflate = LayoutInflater.from(context);
         this.mContext = context;
@@ -40,7 +40,7 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
 
-        View view = mInflate.from(parent.getContext()).inflate(R.layout.activity_police2_item, parent, false);
+        View view = mInflate.from(parent.getContext()).inflate(R.layout.activity_find_item, parent, false);
         MyViewHolder viewHolder = new MyViewHolder(view);
         return viewHolder;
     }
@@ -49,13 +49,13 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         //binding
         holder.atcId.setText(mList.get(position).atcId);
-        holder.lstPlace.setText(mList.get(position).lstPlace);
-        holder.lstPrdtNm.setText(mList.get(position).lstPrdtNm);
-        holder.lstYmd.setText(mList.get(position).lstYmd);
+        holder.depPlace.setText(mList.get(position).depPlace);
+        holder.fdPrdtNm.setText(mList.get(position).fdPrdtNm);
+        holder.fdYmd.setText(mList.get(position).fdYmd);
 
 
         Glide.with(holder.itemView.getContext())
-                .load(mList.get(position).getlstFilePathImg())
+                .load(mList.get(position).getfdFilePathImg())
                 //.load("https://bit.ly/2V1ipNj")
                 .into(holder.imageView2);
 
@@ -71,18 +71,18 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
     //ViewHolder
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView atcId;
-        public TextView lstPlace;
-        public TextView lstPrdtNm;
-        public TextView lstYmd;
+        public TextView depPlace;
+        public TextView fdPrdtNm;
+        public TextView fdYmd;
         public ImageView imageView2;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             atcId = itemView.findViewById(R.id.tv_atcId);
-            lstPlace = itemView.findViewById(R.id.tv_lstPlace);
-            lstPrdtNm = itemView.findViewById(R.id.tv_lstPrdtNm);
-            lstYmd = itemView.findViewById(R.id.tv_lstYmd);
+            depPlace = itemView.findViewById(R.id.tv_depPlace);
+            fdPrdtNm = itemView.findViewById(R.id.tv_fdPrdtNm);
+            fdYmd = itemView.findViewById(R.id.tv_fdYmd);
             imageView2=itemView.findViewById(R.id.imageView2);
 
             //imageView2.setBackground(new ShapeDrawable(new OvalShape()));
@@ -115,5 +115,3 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
 
     }
 }
-
-// recyclerAdapter: http 리퀘스트를 통해 파싱과정을 거쳐 취합된 list라는 ArrayList를 받아서 뷰와 데이터를 바인딩 해준다.

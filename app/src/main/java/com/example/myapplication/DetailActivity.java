@@ -54,10 +54,6 @@ public class DetailActivity extends Activity {
         id=intent.getStringExtra("TEXT");
         ImageView imageView = (ImageView) findViewById(R.id.imageView);
 
-        //imageget = getXmlURL();
-        //imageView.setImageResource(R.drawable.flower);
-        //Glide.with(this).load(image).override(200,200).fitCenter().into(imageView);
-
 
         new Thread(new Runnable() {
 
@@ -82,30 +78,6 @@ public class DetailActivity extends Activity {
 
             }
         }).start();
-        //Glide로 이미지 표시
-
-        //Glide.with(this).load(imageget).override(200,200)
-        //        .error(R.drawable.flower).into(imageView);
-
-
-        //imageView.setImageResource(R.drawable.flower);
-        /*
-        Glide.with(this).load(imageget)
-                .override(200, 200).error(R.drawable.flower)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        return false;
-                    }
-                })
-                .fitCenter().into(imageView);
-    }
-    */
     }
 
     String getXmlData() {

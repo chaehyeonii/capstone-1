@@ -33,6 +33,7 @@
         <activity android:name=".ListviewActivity"/>
         <activity android:name=".LostActivity"/>
         <activity android:name=".DetailActivity"/>
+        <activity android:name=".BadgeActivity"/>
     </application>
 
 </manifest>
