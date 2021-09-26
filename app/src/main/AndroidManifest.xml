@@ -34,6 +34,7 @@
         <activity android:name=".LostActivity"/>
         <activity android:name=".DetailActivity"/>
         <activity android:name=".BadgeActivity"/>
+        <activity android:name=".PopupActivity" android:theme="@android:style/Theme.Dialog" />
     </application>
 
 </manifest>

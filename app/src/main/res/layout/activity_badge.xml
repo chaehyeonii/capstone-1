@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/button_click"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:onClick="badgeclick">
 
     <ImageView
         android:id="@+id/badge1"
@@ -15,6 +16,7 @@
         android:layout_marginTop="53dp"
         android:layout_marginEnd="4dp"
         android:layout_marginRight="4dp"
+        android:onClick="badgeclick"
         app:layout_constraintEnd_toStartOf="@+id/badge2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,6 +31,7 @@
         android:layout_marginTop="53dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
+        android:onClick="badgeclick"
         app:layout_constraintEnd_toStartOf="@+id/badge3"
         app:layout_constraintStart_toEndOf="@+id/badge1"
         app:layout_constraintTop_toTopOf="parent"
@@ -58,6 +61,7 @@
         android:layout_marginTop="53dp"
         android:layout_marginEnd="31dp"
         android:layout_marginRight="31dp"
+        android:onClick="badgeclick"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/badge2"
         app:layout_constraintTop_toTopOf="parent"

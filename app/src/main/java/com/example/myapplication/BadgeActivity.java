@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class BadgeActivity extends Activity {
         badge2.setColorFilter(filter);
         badge3.setColorFilter(filter);
 
+
     }
 
     public void click(View v){
@@ -55,4 +57,28 @@ public class BadgeActivity extends Activity {
             badge3.setColorFilter(null);
         }
     }
+
+    //------팝업 창을 띄우기 위해서
+    public void badgeclick(View v){
+        //데이터 담아서 팝업(액티비티) 호출
+        Intent intent = new Intent(this, PopupActivity.class);
+        if(v.getId()==R.id.badge1){
+            intent.putExtra("data", "게시글 10회 작성 시 획득");
+        } else if(v.getId()==R.id.badge2){
+            intent.putExtra("data", "댓글 10회 작성 시 획득");
+        } else if(v.getId()==R.id.badge3){
+            intent.putExtra("data", "물건 10회 찾아주기 성공 시 획득");
+        }
+        startActivityForResult(intent, 1);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==1){
+            if(resultCode==RESULT_OK){
+                //데이터 받기
+                String result = data.getStringExtra("result");
+            }
+        }
+    }
+
 }
