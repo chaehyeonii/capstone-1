@@ -35,6 +35,8 @@
         <activity android:name=".DetailActivity"/>
         <activity android:name=".BadgeActivity"/>
         <activity android:name=".PopupActivity" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".FindActivity"/>
+        <activity android:name=".Find_Detail"/>
     </application>
 
 </manifest>

@@ -46,22 +46,22 @@ public class Find_Item {
 
 
     public void setatcId(String atcId) { this.atcId=atcId; }
-    public void setclrNm() { this.clrNm=clrNm; }
-    public void setdepPlace() { this.depPlace=depPlace; }
-    public void setfdFilePathImg() { this.fdFilePathImg=fdFilePathImg; }
-    public void setfdPrdtNm() { this.fdPrdtNm=fdPrdtNm; }
-    public void setfdSbjt() { this.fdSbjt=fdSbjt; }
-    public void setfdSn() { this.fdSn=fdSn; }
-    public void setfdYmd() { this.fdYmd=fdYmd; }
-    public void setprdtClNm() { this.prdtClNm=prdtClNm; }
-    public void setrnum() { this.rnum=rnum; }
+    public void setclrNm(String clrNm) { this.clrNm=clrNm; }
+    public void setdepPlace(String depPlace) { this.depPlace=depPlace; }
+    public void setfdFilePathImg(String fdFilePathImg) { this.fdFilePathImg=fdFilePathImg; }
+    public void setfdPrdtNm(String fdPrdtNm) { this.fdPrdtNm=fdPrdtNm; }
+    public void setfdSbjt(String fdSbjt){ this.fdSbjt=fdSbjt; }
+    public void setfdSn(String fdSn){ this.fdSn=fdSn; }
+    public void setfdYmd(String fdYmd) { this.fdYmd=fdYmd; }
+    public void setprdtClNm(String prdtClNm) { this.prdtClNm=prdtClNm; }
+    public void setrnum(String rnum) { this.rnum=rnum; }
 
-    public void setcsteSteNm() { this.csteSteNm=csteSteNm; }
-    public void setfdHor() { this.fdHor=fdHor; }
-    public void setfdPlace() { this.fdPlace=fdPlace; }
-    public void setfndKeepOrgnSeNm() { this.fndKeepOrgnSeNm=fndKeepOrgnSeNm; }
-    public void setorgNm() { this.orgNm=orgNm; }
-    public void settel() { this.tel=tel; }
-    public void setuniq() { this.uniq=uniq; }
+    public void setcsteSteNm(String csteSteNm) { this.csteSteNm=csteSteNm; }
+    public void setfdHor(String fdHor) { this.fdHor=fdHor; }
+    public void setfdPlace(String fdPlace) { this.fdPlace=fdPlace; }
+    public void setfndKeepOrgnSeNm(String fndKeepOrgnSeNm) { this.fndKeepOrgnSeNm=fndKeepOrgnSeNm; }
+    public void setorgNm(String orgNm) { this.orgNm=orgNm; }
+    public void settel(String tel) { this.tel=tel; }
+    public void setuniq(String uniq) { this.uniq=uniq; }
 }
 

@@ -42,15 +42,10 @@ public class DetailActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        //edit = (EditText) findViewById(R.id.edit);
-        //textView1 = (TextView) findViewById(R.id.textView1);
         textView2 = (TextView) findViewById(R.id.textView2);
-        //textView3 = (TextView) findViewById(R.id.textView3);
 
         Intent intent = getIntent(); //1
-        //textView1.setText(intent.getStringExtra("TEXT")); //2
 
-        //id = textView1.getText().toString();
         id=intent.getStringExtra("TEXT");
         ImageView imageView = (ImageView) findViewById(R.id.imageView);
 
@@ -72,7 +67,7 @@ public class DetailActivity extends Activity {
                         textView2.setText(data); //TextView에 문자열  data 출력
                         //textView3.setText(imageget); //TextView에 문자열  data 출력
                         //imageurl = textView3.getText().toString();
-                        Glide.with(getApplicationContext()).load(imageget).override(200,200).error(R.drawable.flower).into(imageView);
+                        Glide.with(getApplicationContext()).load(imageget).error(R.drawable.flower).into(imageView);
                     }
                 });
 

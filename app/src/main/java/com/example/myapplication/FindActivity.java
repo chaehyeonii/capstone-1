@@ -26,8 +26,8 @@ public class FindActivity extends Activity{
     public String dataKey = "%2Byy%2BAg9TKR9ECCv0yM0FkpCbZUyhIAsutQKN5U%2BzwQLeB6cWr1mrzLwH68caK39fPNG1YDiZGj3uv3AjFg6mVw%3D%3D";
     private String requestUrl;
     private String requestUrl2;
-    ArrayList<Police2_Item> list = null;
-    Police2_Item item = null;
+    ArrayList<Find_Item> list = null;
+    Find_Item item = null;
     RecyclerView recyclerView;
 
 
@@ -55,12 +55,14 @@ public class FindActivity extends Activity{
         @Override
         protected String doInBackground(String... strings) {
 
-            requestUrl = "http://apis.data.go.kr/1320000/LostGoodsInfoInqireService/getLostGoodsInfoAccToClAreaPd?serviceKey=" +dataKey+ "&pageNo=1&numOfRows=30";
+            requestUrl = "http://apis.data.go.kr/1320000/LosfundInfoInqireService/getLosfundInfoAccToClAreaPd?serviceKey=" +dataKey+ "&pageNo=1&numOfRows=30";
             try {
                 boolean b_atcId = false;
-                boolean b_lstPlace =false;
-                boolean b_lstPrdtNm = false;
-                boolean b_lstYmd = false;
+                boolean b_depPlace =false;
+                boolean b_fdPrdtNm = false;
+                boolean b_fdYmd = false;
+                boolean b_fdFilePathImg = false;
+                boolean b_fdSn = false;
 
                 URL url = new URL(requestUrl);
                 InputStream is = url.openStream();
@@ -74,7 +76,7 @@ public class FindActivity extends Activity{
                 while(eventType != XmlPullParser.END_DOCUMENT){
                     switch (eventType){
                         case XmlPullParser.START_DOCUMENT:
-                            list = new ArrayList<Police2_Item>();
+                            list = new ArrayList<Find_Item>();
                             break;
                         case XmlPullParser.END_DOCUMENT:
                             break;
@@ -85,79 +87,35 @@ public class FindActivity extends Activity{
                             break;
                         case XmlPullParser.START_TAG:
                             if(parser.getName().equals("item")){
-                                item = new Police2_Item();
+                                item = new Find_Item();
                             }
                             if (parser.getName().equals("atcId")) b_atcId = true;
-                            if (parser.getName().equals("lstPlace")) b_lstPlace = true;
-                            if (parser.getName().equals("lstPrdtNm")) b_lstPrdtNm = true;
-                            if (parser.getName().equals("lstYmd")) b_lstYmd = true;
+                            if (parser.getName().equals("depPlace")) b_depPlace = true;
+                            if (parser.getName().equals("fdPrdtNm")) b_fdPrdtNm = true;
+                            if (parser.getName().equals("fdYmd")) b_fdYmd = true;
+                            if (parser.getName().equals("fdFilePathImg")) b_fdFilePathImg = true;
+                            if (parser.getName().equals("fdSn")) b_fdSn = true;
                             break;
 
                         case XmlPullParser.TEXT:
                             if(b_atcId){
                                 item.setatcId(parser.getText());
                                 b_atcId = false;
-
-                                //목록에 이미지 불러오기 위한 코드
-                                StringBuffer image = new StringBuffer();
-                                String queryUrl = "http://apis.data.go.kr/1320000/LostGoodsInfoInqireService/getLostGoodsDetailInfo?"//요청 URL
-                                        + "ATC_ID=" + parser.getText() + "&ServiceKey=" + dataKey;
-
-                                try {
-                                    URL url2 = new URL(queryUrl);//문자열로 된 요청 url을 URL 객체로 생성.
-                                    InputStream is2 = url2.openStream(); //url위치로 입력스트림 연결
-
-                                    XmlPullParserFactory factory2 = XmlPullParserFactory.newInstance();
-                                    XmlPullParser xpp2 = factory2.newPullParser();
-                                    xpp2.setInput(new InputStreamReader(is2, "UTF-8")); //inputstream 으로부터 xml 입력받기
-
-                                    String tag2;
-
-                                    xpp2.next();
-                                    int eventType2 = xpp2.getEventType();
-
-                                    while (eventType2 != XmlPullParser.END_DOCUMENT) {
-
-                                        switch (eventType2) {
-                                            case XmlPullParser.START_DOCUMENT:
-                                                break;
-
-                                            case XmlPullParser.START_TAG:
-                                                tag2 = xpp2.getName();//태그 이름 얻어오기
-
-                                                if (tag2.equals("item")) ;// 첫번째 검색결과
-                                                else if (tag2.equals("lstFilePathImg")) {
-                                                    xpp2.next();
-                                                    image.append(xpp2.getText());
-                                                }
-                                                break;
-
-                                            case XmlPullParser.TEXT:
-                                                break;
-
-                                            case XmlPullParser.END_TAG:
-                                                tag2 = xpp2.getName(); //태그 이름 얻어오기
-
-                                                if (tag2.equals("item")) ;// 첫번째 검색결과종료..줄바꿈
-                                                break;
-                                        }
-                                        eventType2 = xpp2.next();
-                                    }
-
-                                } catch (Exception e) {
-                                    // TODO Auto-generated catch blocke.printStackTrace();
-                                }
-                                item.setlstFilePathImg(image.toString());//StringBuffer 문자열 객체 반환
-
-                            } else if(b_lstPlace) {
-                                item.setlstPlace(parser.getText());
-                                b_lstPlace = false;
-                            } else if (b_lstPrdtNm) {
-                                item.setlstPrdtNm(parser.getText());
-                                b_lstPrdtNm = false;
-                            } else if(b_lstYmd) {
-                                item.setlstYmd(parser.getText());
-                                b_lstYmd = false;
+                            } else if(b_depPlace) {
+                                item.setdepPlace(parser.getText());
+                                b_depPlace = false;
+                            } else if (b_fdPrdtNm) {
+                                item.setfdPrdtNm(parser.getText());
+                                b_fdPrdtNm = false;
+                            } else if(b_fdYmd) {
+                                item.setfdYmd(parser.getText());
+                                b_fdYmd = false;
+                            } else if(b_fdFilePathImg) {
+                                item.setfdFilePathImg(parser.getText());
+                                b_fdFilePathImg = false;
+                            } else if(b_fdSn) {
+                                item.setfdSn(parser.getText());
+                                b_fdSn = false;
                             }
                             break;
                     }
@@ -177,7 +135,7 @@ public class FindActivity extends Activity{
             super.onPostExecute(s);
 
             //어답터 연결
-            Police2_Adapter adapter = new Police2_Adapter(getApplicationContext(), list);
+            Find_Adapter adapter = new Find_Adapter(getApplicationContext(), list);
             recyclerView.setAdapter(adapter);
         }
     }

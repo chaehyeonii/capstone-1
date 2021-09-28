@@ -12,7 +12,7 @@
         <TextView
             android:id="@+id/textView2"
             android:layout_width="366dp"
-            android:layout_height="338dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:textSize="13sp"
@@ -21,7 +21,7 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:srcCompat="@drawable/flower" />
 
 

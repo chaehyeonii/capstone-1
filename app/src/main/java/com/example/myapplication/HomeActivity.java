@@ -92,6 +92,15 @@ public class HomeActivity extends Activity {
             }
         });
 
+        Button button_find = findViewById(R.id.button_find); //뱃지 버튼 가져오기
+        button_find.setOnClickListener(new View.OnClickListener() { //뱃지 버튼 클릭 시 화면 전환
+            @Override
+            public void onClick(View v) {
+                Intent intent_find = new Intent(getApplicationContext(), FindActivity.class);
+                startActivity(intent_find);
+            }
+        });
+
 
 
 
