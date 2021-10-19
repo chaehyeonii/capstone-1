@@ -4,24 +4,32 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/drawable/ic_launcher_background.xml" value="0.12916666666666668" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_address.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_address_view.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_badge.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_chatting.xml" value="0.1203125" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_declare.xml" value="0.115625" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_detail.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_detail_find.xml" value="0.121875" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_detail_item.xml" value="0.15942028985507245" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_detail_search.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_find_item.xml" value="0.1" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_gps.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_home.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_item.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_listview.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_lost.xml" value="0.16666666666666666" />
-        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_lost_item.xml" value="0.12545289855072464" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_lost_item.xml" value="0.4466666666666667" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_main1.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_police.xml" value="0.15416666666666667" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_police2.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_police2_item.xml" value="0.22" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_popup.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/fontsize.xml" value="0.1" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/item_loading.xml" value="0.1" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/item_row.xml" value="0.4466666666666667" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/popup_menu.xml" value="0.1" />
       </map>
     </option>
   </component>

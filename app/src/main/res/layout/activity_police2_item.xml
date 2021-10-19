@@ -48,12 +48,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="분실지역: "
+                android:text="분실물: "
                 android:textSize="13sp" />
 
             <TextView
-                android:id="@+id/tv_lstPlace"
-                android:layout_width="match_parent"
+                android:id="@+id/tv_lstPrdtNm"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13sp" />
 
@@ -67,12 +67,32 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="분실물: "
+                android:text="분실지역명: "
                 android:textSize="13sp" />
 
             <TextView
-                android:id="@+id/tv_lstPrdtNm"
+                android:id="@+id/tv_lstLctNm"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="분실장소: "
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_lstPlace"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="13sp" />
 

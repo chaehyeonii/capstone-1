@@ -7,7 +7,10 @@ package com.example.myapplication;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,6 +31,13 @@ public class Police2Activity extends Activity{
     Police2_Item item = null;
     RecyclerView recyclerView;
 
+    //-------무한 스크롤------------
+    NestedScrollView nestedScrollView;
+    ProgressBar progressBar;
+
+    // 1페이지에 10개씩 데이터 불러오기
+    int page=1,limit=40;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +56,45 @@ public class Police2Activity extends Activity{
         //AsyncTask
         MyAsyncTask myAsyncTask = new MyAsyncTask();
         myAsyncTask.execute();
+
+
+        //-----무한 스크롤--------
+        nestedScrollView=findViewById(R.id.scroll_view);
+        progressBar=findViewById(R.id.progress_bar);
+
+
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener(){
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY){
+                if(scrollY==v.getChildAt(0).getMeasuredHeight()-v.getMeasuredHeight()){
+                    page++;
+                    progressBar.setVisibility(View.VISIBLE);
+                    getXmlData(page, limit);
+
+                    //myAsyncTask.execute();
+                }
+            }
+        });
+
+
     }
 
-    public class MyAsyncTask extends AsyncTask<String, Void, String> {
+
+    void getXmlData(int page, int limit){
+        MyAsyncTask myAsyncTask = new MyAsyncTask();
+        myAsyncTask.execute();
+    }
+
+
+
+
+
+    public class MyAsyncTask extends AsyncTask<String, Void, String>{
 
         @Override
         protected String doInBackground(String... strings) {
 
-            requestUrl = "http://apis.data.go.kr/1320000/LostGoodsInfoInqireService/getLostGoodsInfoAccToClAreaPd?serviceKey=" +dataKey+ "&pageNo=1&numOfRows=30";
+            requestUrl = "http://apis.data.go.kr/1320000/LostGoodsInfoInqireService/getLostGoodsInfoAccToClAreaPd?serviceKey=" +dataKey+ "&pageNo="+page+"&numOfRows="+limit;
             try {
                 boolean b_atcId = false;
                 boolean b_lstPlace =false;

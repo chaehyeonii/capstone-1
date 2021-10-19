@@ -5,55 +5,77 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/button_taxi"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/edit_addr"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginBottom="412dp"
-        android:text="@string/button_taxi"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_subway"
-        android:onClick="onClick_url" />
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:ems="10"
+        android:hint="주소를 추가해주세요."
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <Button
-        android:id="@+id/button_subway"
+        android:id="@+id/button_gps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginLeft="36dp"
-        android:layout_marginEnd="36dp"
-        android:layout_marginRight="36dp"
-        android:layout_marginBottom="412dp"
-        android:text="@string/button_subway"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_taxi"
-        app:layout_constraintStart_toEndOf="@+id/button_bus"
-        android:onClick="onClick_url" />
+        android:layout_marginStart="39dp"
+        android:layout_marginLeft="39dp"
+        android:layout_marginTop="31dp"
+        android:layout_marginEnd="34dp"
+        android:layout_marginRight="34dp"
+        android:onClick="onClick_url"
+        android:text="GPS"
+        app:layout_constraintEnd_toStartOf="@+id/button_address"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_listview" />
+
+    <Button
+        android:id="@+id/button_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="34dp"
+        android:layout_marginLeft="34dp"
+        android:layout_marginTop="27dp"
+        android:onClick="onClick_url"
+        android:text="주소검색"
+        app:layout_constraintStart_toEndOf="@+id/button_gps"
+        app:layout_constraintTop_toBottomOf="@+id/button_police2" />
 
     <Button
         android:id="@+id/button_bus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginBottom="412dp"
-        android:text="@string/button_bus"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:onClick="onClick_url" />
+        android:layout_marginStart="14dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="59dp"
+        android:layout_marginRight="59dp"
+        android:onClick="onClick_url"
+        android:text="대중교통"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_address"
+        app:layout_constraintTop_toBottomOf="@+id/button_find" />
 
     <Button
         android:id="@+id/button_police"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="176dp"
-        android:layout_marginLeft="176dp"
-        android:layout_marginBottom="284dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
         android:text="@string/button_police"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/button_badge"
+        app:layout_constraintStart_toEndOf="@+id/button_click"
+        app:layout_constraintTop_toBottomOf="@+id/button_address" />
 
     <Button
         android:id="@+id/button_police2"
@@ -81,15 +103,15 @@
         android:id="@+id/button_click"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
-        android:layout_marginLeft="35dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginBottom="285dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginLeft="27dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginRight="18dp"
         android:text="@string/button_click"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_police"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_gps" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -124,14 +146,15 @@
         android:id="@+id/button_badge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="22dp"
-        android:layout_marginLeft="22dp"
-        android:layout_marginTop="75dp"
-        android:layout_marginEnd="37dp"
-        android:layout_marginRight="37dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="39dp"
+        android:layout_marginRight="39dp"
         android:text="뱃지"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button_police"
-        app:layout_constraintTop_toBottomOf="@+id/button_taxi" />
+        app:layout_constraintTop_toBottomOf="@+id/button_bus" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

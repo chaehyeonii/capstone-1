@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myapplication">
-    <uses-permission android:name = "android.permission.INTERNET"/>   //인터넷 사용 허용
+    <uses-permission android:name = "android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <!-- 파일 업로드할 때 외부저장소에 대한 퍼미션-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+
 
 
     <application
@@ -37,6 +46,15 @@
         <activity android:name=".PopupActivity" android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".FindActivity"/>
         <activity android:name=".Find_Detail"/>
+
+        <activity android:name=".DetailSearch"/>
+
+
+        <activity android:name=".GpsActivity"/>
+        <activity android:name=".AddressActivity"/>
+        <activity android:name=".AddressActivity_webview"/>
+
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>
 
 </manifest>

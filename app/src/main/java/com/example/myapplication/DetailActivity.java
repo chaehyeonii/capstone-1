@@ -57,7 +57,6 @@ public class DetailActivity extends Activity {
                 // TODO Auto-generated method stub
                 data = getXmlData();//아래 메소드를 호출하여 XML data를 파싱해서 String 객체로 얻어오기\
                 imageget = getXmlURL();
-                //Glide.with(getApplicationContext()).load(imageget).override(200,200).error(R.drawable.flower).into(imageView);
 
                 runOnUiThread(new Runnable() {
 
@@ -65,8 +64,6 @@ public class DetailActivity extends Activity {
                     public void run() {
                         // TODO Auto-generated method stub
                         textView2.setText(data); //TextView에 문자열  data 출력
-                        //textView3.setText(imageget); //TextView에 문자열  data 출력
-                        //imageurl = textView3.getText().toString();
                         Glide.with(getApplicationContext()).load(imageget).error(R.drawable.flower).into(imageView);
                     }
                 });
