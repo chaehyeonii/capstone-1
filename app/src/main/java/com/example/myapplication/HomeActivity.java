@@ -1,14 +1,18 @@
 package com.example.myapplication;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -44,7 +48,7 @@ public class HomeActivity extends Activity {
 
     //url 연결 링크, 가져온 주소 값
     String address;
-    String url;
+    String url_bus="", url_taxi="", url_subway="";
 
 
     @Override
@@ -176,49 +180,52 @@ public class HomeActivity extends Activity {
                     // 주소결과
                     startActivityForResult(i, SEARCH_ADDRESS_ACTIVITY);
 
-                    /*
-                    Intent get=getIntent();
-                    address=get.getStringExtra("data");
-                    address = address.substring(0, address.indexOf(" "));
-                    if (address.equals("부산") ){
-                        url="https://www.seoul.go.kr/v2012/find.html?m=3";
-                    }
-
-                     */
-
-
-
                 }else {
                     Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
-
         });
-        //----------------------------------
 
 
-        /*
-        Intent intent = getIntent(); //1
-        address=intent.getStringExtra("data");
-        address = address.substring(0, address.indexOf(" "));
-        if (address.equals("부산광역시") ){
-            url="https://www.seoul.go.kr/v2012/find.html?m=3";
-        }
-
-
-         */
-
-
-        Button button_bus = findViewById(R.id.button_bus);
-        button_bus.setOnClickListener(new View.OnClickListener() {
+        //--------검색 팝업-------------
+        findViewById(R.id.button_bus).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent_bus = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(intent_bus);
+            public void onClick(final View view) {
+                final PopupMenu popup_menu = new PopupMenu(getApplicationContext(),view);
+                getMenuInflater().inflate(R.menu.popup_menu,popup_menu.getMenu());
+                popup_menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        if (menuItem.getItemId() == R.id.action_bus){
+                            if(url_bus.equals("")){
+                                noAddress(); //주소 미입력 시, 안내창
+                            }else {
+                                Intent intent_bus = new Intent(Intent.ACTION_VIEW, Uri.parse(url_bus));
+                                startActivity(intent_bus);
+                            }
+                        }else if (menuItem.getItemId() == R.id.action_taxi){
+                            if(url_bus.equals("")){
+                                noAddress(); //주소 미입력 시, 안내창
+                            }else {
+                                Intent intent_taxi = new Intent(Intent.ACTION_VIEW, Uri.parse(url_taxi));
+                                startActivity(intent_taxi);
+                            }
+                        }else if (menuItem.getItemId() == R.id.action_subway){
+                            if(url_bus.equals("")){
+                                noAddress(); //주소 미입력 시, 안내창
+                            }else {
+                                Intent intent_subway = new Intent(Intent.ACTION_VIEW, Uri.parse(url_subway));
+                                startActivity(intent_subway);
+                            }
+                        }
+                        return false;
+                    }
+                });
+                popup_menu.show();
             }
         });
+
+        //---------------------------------------------------------------
 
 
 
@@ -310,25 +317,6 @@ public class MyAsyncTask extends AsyncTask<String, Void, String> {
 }
     //   --------------------------------------
 
-//-----url 연결 버튼 클릭 시-------
-public void onClick_url(View v) {
-    Intent intent = new Intent(Intent.ACTION_VIEW);
-/*
-    if (data.equals("부산*") ){
-        url="https://www.seoul.go.kr/v2012/find.html?m=3";
-    }
-
-*/
-    switch (v.getId()) {
-        case R.id.button_bus:
-            //intent.setData(Uri.parse("https://www.seoul.go.kr/v2012/find.html?m=3"));
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
-            break;
-    }
-    }
-
-
 
     //------주소 검색 ------------
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -347,14 +335,101 @@ public void onClick_url(View v) {
                         // 주소를 intent값으로 받아와서 일치하는 지역으로 url 설정정
                        address = data.substring(0, data.indexOf(" "));
                         if (address.equals("서울") ){
-                            url="https://www.seoul.go.kr/v2012/find.html?m=3";
+                            url_bus="https://www.seoul.go.kr/v2012/find.html?m=3";
+                            url_taxi="http://www.stj.or.kr/";
+                            url_subway="https://smrte.co.kr/support/lost";
+                        } else if (address.equals("대구")){
+                            url_bus="https://businfo.daegu.go.kr:8095/dbms_web/content/customer/found";
+                            url_taxi="http://www.dgt.or.kr/popup/lost_tab_100420.html";
+                            url_subway="http://www.dtro.or.kr/open_content_new/ko/sub_page/page.php?mnu_puid1=1&mnu_uid=13&mnu_puid2=12";
+                        } else if(address.equals("부산")) {
+                            url_bus = "http://www.busanbus.or.kr/busanbus/lost";
+                            url_taxi = "http://www.bgtj.or.kr/webapps/freezone/loss_reply_list.jsp?table_name=TB_BBS_REPLY&boardtype=1";
+                            url_subway = "http://www.humetro.busan.kr/homepage/default/lost/list.do?menu_no=1001010402#N";
+                        } else if(address.equals("인천")) {
+                            url_bus = "http://www.incheonbus.or.kr/";
+                            url_taxi = "http://www.incheoncall.com/bbs/board_list.asp?curPage=3&SearchKey=&SearchWord=&PCD=D0003&bbs=lost&pSize=10";
+                            url_subway = "";
+                        } else if(address.equals("광주")) {
+                            url_bus = "http://bus.gwangju.go.kr/guide/lost/lostList";
+                            url_taxi = "http://www.gjtaxi.or.kr/module/board/board.php?bo_table=admin&device=pc";
+                            url_subway = "https://www.grtc.co.kr/subway/board/list.do?rbsIdx=113";
+                        } else if(address.equals("대전")) {
+                            url_bus = "http://www.djbusterminal.co.kr/?module=Board&action=SiteBoard&iBrdNo=20&sMode=SELECT_FORM";
+                            url_taxi = "http://www.djtaxi.co.kr/";
+                            url_subway = "https://www.djet.co.kr/kor/page.do?menuIdx=311";
+                        } else if(address.equals("울산")) {
+                            url_bus = "http://www.ulsan.go.kr/s/lost/main.ulsan";
+                            url_taxi = "http://www.ulsan.go.kr/s/lost/main.ulsan";
+                            url_subway = "";
+                        } else if(address.equals("경기")) {
+                            url_bus = "http://www.gbus.or.kr/2006/lost/lost_01.htm?sm=3_1";
+                            url_taxi = "http://www.ggtaxi.or.kr/03/03041.php";
+                            url_subway = "";
+                        } else if(address.equals("강원")) {
+                            //시별로 유실물 센터 나눠진 듯
+                            url_bus = "";
+                            url_taxi = "";
+                            url_subway = "";
+                        } else if(address.equals("충북")) {
+                            url_bus = "";
+                            url_taxi = "";
+                            url_subway = "";
+                        } else if(address.equals("충남")) {
+                            url_bus = "";
+                            url_taxi = "";
+                            url_subway = "";
+                        } else if(address.equals("전북")) {
+                            url_bus = "";
+                            url_taxi = "";
+                            url_subway = "";
+                        } else if(address.equals("전남")) {
+                            url_bus = "";
+                            url_taxi = "";
+                            url_subway = "";
+                        } else if(address.equals("경북")) {
+                            url_bus = "";
+                            url_taxi = "";
+                            url_subway = "";
+                        } else if(address.equals("경남")) {
+                            url_bus = "";
+                            url_taxi = "";
+                            url_subway = "";
+                        } else if(address.equals("제주특별자치도")) {
+                            url_bus = "https://www.jeju.go.kr/traffic/loss/guide.htm";
+                            url_taxi = "";
+                            url_subway = "";
                         }
-
                     }
                 }
                 break;
         }
     }
 
-    //--------------------------
+    //--------------------------안내 팝업
+    void noAddress() { //주소 미입력 시, 나올 팝업
+        AlertDialog.Builder msgBuilder = new AlertDialog.Builder(HomeActivity.this)
+                .setTitle("주소 미입력") .setMessage("상단에 주소를 추가해주세요.")
+                .setPositiveButton("확 인", new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialogInterface, int i) {
+                        //Toast.makeText(HomeActivity.this, "확인", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        AlertDialog msgDlg = msgBuilder.create();
+        msgDlg.show();
+    }
+
+    void noProvide() { //해당 지역에서 습득물/분실물 사이트 제공하지 않을 시 나올 팝업
+        AlertDialog.Builder msgBuilder = new AlertDialog.Builder(HomeActivity.this)
+                .setTitle("제공 불가 지역") .setMessage("해당지역은 서비스 제공을 하지않습니다.")
+                .setPositiveButton("확 인", new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialogInterface, int i) {
+                        //Toast.makeText(HomeActivity.this, "확인", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        AlertDialog msgDlg = msgBuilder.create();
+        msgDlg.show();
+    }
+
+
 }
