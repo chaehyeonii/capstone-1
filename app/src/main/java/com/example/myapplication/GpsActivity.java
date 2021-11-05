@@ -20,13 +20,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 
-public class GpsActivity extends AppCompatActivity
-{
+public class GpsActivity extends AppCompatActivity {
     private GpsTracker gpsTracker;
 
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
@@ -34,47 +43,117 @@ public class GpsActivity extends AppCompatActivity
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
 
+    //db 연동을 위해 사용
+    String url_bus="", url_taxi="", url_subway="";
+    ArrayList<HashMap<String, String>> mArrayList=new ArrayList<>();
+    private static final String TAG_region = "region";
+    private static final String TAG_bus_in = "bus_in";
+    private static final String TAG_bus_out ="bus_out";
+    private static final String TAG_taxi_private = "taxi_private";
+    private static final String TAG_taxi_corporate ="taxi_corporate";
+    private static final String TAG_subway ="subway";
+
+    String region, bus_in, bus_out, taxi_private, taxi_corporate,subway;
+    String region1, region2;
+    String[] gps_address;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
 
-
         if (!checkLocationServicesStatus()) {
-
             showDialogForLocationServiceSetting();
         }else {
-
             checkRunTimePermission();
         }
 
         final TextView textview_address = (TextView)findViewById(R.id.textview);
+        TextView textView5=findViewById(R.id.textView5);
+        TextView textView6=findViewById(R.id.textView6);
 
 
         Button ShowLocationButton = (Button) findViewById(R.id.button);
-        ShowLocationButton.setOnClickListener(new View.OnClickListener()
-        {
+        ShowLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View arg0)
-            {
+            public void onClick(View arg0) {
 
                 gpsTracker = new GpsTracker(GpsActivity.this);
 
                 double latitude = gpsTracker.getLatitude();
                 double longitude = gpsTracker.getLongitude();
 
-                String address = getCurrentAddress(latitude, longitude);
+                String address = getCurrentAddress(latitude, longitude)
+                        .replace("대한민국",""); //대한민국이라고 뜨는 부분을 지움
                 textview_address.setText(address);
+                //String get_address=textview_address.getText().toString();
+                gps_address=address.split(" ");
+                gps_address[0]=gps_address[1];
+                gps_address[1]=gps_address[2];
+                region1=gps_address[0];
+                region2=gps_address[1];
+                textView6.setText(region1);
+
 
                 Toast.makeText(GpsActivity.this, "현재위치 \n위도 " + latitude + "\n경도 " + longitude, Toast.LENGTH_LONG).show();
+
+                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject JsonObject = new JSONObject(response);
+                            boolean success=JsonObject.getBoolean("success");
+                            JSONArray jsonArray = JsonObject.getJSONArray("getpostdata");
+
+                            Log.i("test", "성공?");
+                            for(int i=0;i<jsonArray.length();i++){
+                                JSONObject item = jsonArray.getJSONObject(i);
+                                region = item.getString(TAG_region );
+                                bus_in = item.getString(TAG_bus_in );
+                                bus_out = item.getString(TAG_bus_out );
+                                taxi_private = item.getString(TAG_taxi_private );
+                                taxi_corporate = item.getString(TAG_taxi_corporate );
+                                subway = item.getString(TAG_subway );
+
+                                HashMap<String,String> hashMap = new HashMap<>();
+
+                                hashMap.put(TAG_region, region);
+                                hashMap.put(TAG_bus_in, bus_in);
+                                hashMap.put(TAG_bus_out, bus_out);
+                                hashMap.put(TAG_taxi_private, taxi_private);
+                                hashMap.put(TAG_taxi_corporate, taxi_corporate);
+                                hashMap.put(TAG_subway, subway);
+                                mArrayList.add(hashMap);
+                                Log.e("test",String.valueOf(mArrayList));
+                            }
+                            if(success){
+                                Toast.makeText(getApplicationContext(),"주소입력 성공",Toast.LENGTH_SHORT).show();
+                                url_bus=bus_out;
+                                url_taxi=taxi_corporate;
+                                url_subway=subway;
+                                textView5.setText(url_bus);
+
+                            }else{
+                                Toast.makeText(getApplicationContext(),"주소입력 실패",Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        } catch (JSONException e) {
+                            Log.e("test","test: catch");
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                //서버로 Volley 이용해서 요청
+                RequestRegion RequestRegion = new RequestRegion( region1,region2, responseListener);
+                RequestQueue queue = Volley.newRequestQueue( GpsActivity.this );
+                queue.add( RequestRegion );
             }
         });
     }
 
 
     /*
-     * ActivityCompat.requestPermissions를 사용한 퍼미션 요청의 결과를 리턴받는 메소드입니다.
+     * ActivityCompat.requestPermissions를 사용한 퍼미션 요청의 결과를 리턴받는 메소드
      */
     @Override
     public void onRequestPermissionsResult(int permsRequestCode,
@@ -84,12 +163,8 @@ public class GpsActivity extends AppCompatActivity
         if ( permsRequestCode == PERMISSIONS_REQUEST_CODE && grandResults.length == REQUIRED_PERMISSIONS.length) {
 
             // 요청 코드가 PERMISSIONS_REQUEST_CODE 이고, 요청한 퍼미션 개수만큼 수신되었다면
-
             boolean check_result = true;
-
-
             // 모든 퍼미션을 허용했는지 체크합니다.
-
             for (int result : grandResults) {
                 if (result != PackageManager.PERMISSION_GRANTED) {
                     check_result = false;
@@ -97,11 +172,8 @@ public class GpsActivity extends AppCompatActivity
                 }
             }
 
-
             if ( check_result ) {
-
-                //위치 값을 가져올 수 있음
-                ;
+                //위치 값을 가져올 수 있음;
             }
             else {
                 // 거부한 퍼미션이 있다면 앱을 사용할 수 없는 이유를 설명해주고 앱을 종료합니다.2 가지 경우가 있습니다.
@@ -112,11 +184,8 @@ public class GpsActivity extends AppCompatActivity
                     Toast.makeText(GpsActivity.this, "퍼미션이 거부되었습니다. 앱을 다시 실행하여 퍼미션을 허용해주세요.", Toast.LENGTH_LONG).show();
                     finish();
 
-
                 }else {
-
                     Toast.makeText(GpsActivity.this, "퍼미션이 거부되었습니다. 설정(앱 정보)에서 퍼미션을 허용해야 합니다. ", Toast.LENGTH_LONG).show();
-
                 }
             }
 
@@ -124,25 +193,17 @@ public class GpsActivity extends AppCompatActivity
     }
 
     void checkRunTimePermission(){
-
         //런타임 퍼미션 처리
         // 1. 위치 퍼미션을 가지고 있는지 체크합니다.
         int hasFineLocationPermission = ContextCompat.checkSelfPermission(GpsActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
         int hasCoarseLocationPermission = ContextCompat.checkSelfPermission(GpsActivity.this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
-
-
         if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
                 hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED) {
-
             // 2. 이미 퍼미션을 가지고 있다면
             // ( 안드로이드 6.0 이하 버전은 런타임 퍼미션이 필요없기 때문에 이미 허용된 걸로 인식합니다.)
-
-
             // 3.  위치 값을 가져올 수 있음
-
-
 
         } else {  //2. 퍼미션 요청을 허용한 적이 없다면 퍼미션 요청이 필요합니다. 2가지 경우(3-1, 4-1)가 있습니다.
 
@@ -155,28 +216,21 @@ public class GpsActivity extends AppCompatActivity
                 ActivityCompat.requestPermissions(GpsActivity.this, REQUIRED_PERMISSIONS,
                         PERMISSIONS_REQUEST_CODE);
 
-
             } else {
                 // 4-1. 사용자가 퍼미션 거부를 한 적이 없는 경우에는 퍼미션 요청을 바로 합니다.
                 // 요청 결과는 onRequestPermissionResult에서 수신됩니다.
                 ActivityCompat.requestPermissions(GpsActivity.this, REQUIRED_PERMISSIONS,
                         PERMISSIONS_REQUEST_CODE);
             }
-
         }
-
     }
 
 
     public String getCurrentAddress( double latitude, double longitude) {
-
         //지오코더... GPS를 주소로 변환
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-
         List<Address> addresses;
-
         try {
-
             addresses = geocoder.getFromLocation(
                     latitude,
                     longitude,
@@ -188,26 +242,20 @@ public class GpsActivity extends AppCompatActivity
         } catch (IllegalArgumentException illegalArgumentException) {
             Toast.makeText(this, "잘못된 GPS 좌표", Toast.LENGTH_LONG).show();
             return "잘못된 GPS 좌표";
-
         }
-
-
 
         if (addresses == null || addresses.size() == 0) {
             Toast.makeText(this, "주소 미발견", Toast.LENGTH_LONG).show();
             return "주소 미발견";
-
         }
 
         Address address = addresses.get(0);
         return address.getAddressLine(0).toString()+"\n";
-
     }
 
 
     //여기부터는 GPS 활성화를 위한 메소드들
     private void showDialogForLocationServiceSetting() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(GpsActivity.this);
         builder.setTitle("위치 서비스 비활성화");
         builder.setMessage("앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n"
@@ -234,30 +282,24 @@ public class GpsActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         switch (requestCode) {
-
             case GPS_ENABLE_REQUEST_CODE:
 
                 //사용자가 GPS 활성 시켰는지 검사
                 if (checkLocationServicesStatus()) {
                     if (checkLocationServicesStatus()) {
-
                         Log.d("@@@", "onActivityResult : GPS 활성화 되있음");
                         checkRunTimePermission();
                         return;
                     }
                 }
-
                 break;
         }
     }
 
     public boolean checkLocationServicesStatus() {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
-
 }

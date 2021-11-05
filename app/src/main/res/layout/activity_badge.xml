@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".BadgeActivity">
+    tools:context=".MainActivity">
 
     <EditText
         android:id="@+id/et_name"
@@ -28,18 +28,25 @@
         android:text="select Image"
         android:textAllCaps="false"
         android:onClick="clickBtn"/>
+
     <ImageView
         android:id="@+id/iv"
         android:layout_width="match_parent"
         android:layout_height="200dp"/>
+
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="upload data"
-        android:onClick="clickUpload"/>
-    <Button
-        android:layout_width="match_parent"
+        android:text="Click To Upload File"
+        android:id="@+id/uploadButton"
+        />
+
+    <TextView
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="load data"
-        android:onClick="clickLoad"/>
+        android:text=""
+        android:id="@+id/messageText"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        />
 </LinearLayout>

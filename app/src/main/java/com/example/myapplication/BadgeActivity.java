@@ -1,72 +1,328 @@
 package com.example.myapplication;
 
-import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.content.CursorLoader;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.error.VolleyError;
-import com.android.volley.request.SimpleMultiPartRequest;
-import com.android.volley.toolbox.Volley;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
-public class BadgeActivity extends AppCompatActivity {
 
-    EditText etName, etMsg;
+
+public class BadgeActivity extends Activity{
+    TextView messageText;
+    Button uploadButton;
+    int serverResponseCode = 0;
+    ProgressDialog dialog = null;
+    String upLoadServerUri = null;
+
+
+    //----끼워넣기---------
+    EditText etName,etMsg;
     ImageView iv;
-
     String imgPath;
+    //------------------
+
+
+
+    /**********  File Path *************/
+
+    final String uploadFilePath = "storage/emulated/0/Pictures/";//경로를 모르겠으면, 갤러리 어플리케이션 가서 메뉴->상세 정보
+
+    final String uploadFileName = "haha.png"; //전송하고자하는 파일 이름
+
+
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_badge);
+        uploadButton = (Button)findViewById(R.id.uploadButton);
+        messageText  = (TextView)findViewById(R.id.messageText);
 
+        messageText.setText("Uploading file path :- '/mnt/sdcard/"+uploadFileName+"'");
+
+
+
+        //-----끼워넣기-----
         etName=findViewById(R.id.et_name);
         etMsg=findViewById(R.id.et_msg);
         iv=findViewById(R.id.iv);
+        //----------------
 
-        //외부 저장소에 권한 필요, 동적 퍼미션
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
-            int permissionResult= checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            if(permissionResult== PackageManager.PERMISSION_DENIED){
-                String[] permissions= new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                requestPermissions(permissions,10);
+
+
+        /************* Php script path ****************/
+
+        upLoadServerUri = "http://skysea750.dothome.co.kr/UploadToServer.php";//서버컴퓨터의 ip주소
+
+
+
+        uploadButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+
+            public void onClick(View v) {
+
+
+
+                dialog = ProgressDialog.show(BadgeActivity.this, "", "Uploading file...", true);
+
+
+
+                new Thread(new Runnable() {
+
+                    public void run() {
+
+                        runOnUiThread(new Runnable() {
+
+                            public void run() {
+
+                                messageText.setText("uploading started.....");
+
+                            }
+
+                        });
+
+                        uploadFile(uploadFilePath + "" + uploadFileName);
+
+                    }
+
+                }).start();
+
             }
-        }
+
+        });
+
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch(requestCode){
-            case 10:
-                if(grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                    Toast.makeText(this, "외부 메모리 읽기/쓰기 사용 가능", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(this, "외부 메모리 읽기/쓰기 제한", Toast.LENGTH_SHORT).show();
+
+
+    @SuppressLint("LongLogTag")
+    public int uploadFile(String sourceFileUri) {
+        String fileName = sourceFileUri;
+        HttpURLConnection conn = null;
+
+        DataOutputStream dos = null;
+
+        String lineEnd = "\r\n";
+
+        String twoHyphens = "--";
+
+        String boundary = "*****";
+
+        int bytesRead, bytesAvailable, bufferSize;
+
+        byte[] buffer;
+
+        int maxBufferSize = 1 * 1024 * 1024;
+
+        File sourceFile = new File(sourceFileUri);
+
+
+
+        if (!sourceFile.isFile()) {
+
+
+
+            dialog.dismiss();
+
+
+
+            Log.e("uploadFile", "Source File not exist :"
+
+                    +uploadFilePath + "" + uploadFileName);
+
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    messageText.setText("Source File not exist :"
+
+                            +uploadFilePath + "" + uploadFileName);
                 }
-                break;
+            });
+            return 0;
         }
+
+        else{
+            try {
+                // open a URL connection to the Servlet
+                FileInputStream fileInputStream = new FileInputStream(sourceFile);
+                URL url = new URL(upLoadServerUri);
+
+
+
+                // Open a HTTP  connection to  the URL
+
+                conn = (HttpURLConnection) url.openConnection();
+
+                conn.setDoInput(true); // Allow Inputs
+
+                conn.setDoOutput(true); // Allow Outputs
+
+                conn.setUseCaches(false); // Don't use a Cached Copy
+
+                conn.setRequestMethod("POST");
+
+                conn.setRequestProperty("Connection", "Keep-Alive");
+
+                conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+
+                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+
+                conn.setRequestProperty("uploaded_file", fileName);
+
+
+
+                dos = new DataOutputStream(conn.getOutputStream());
+
+
+
+                dos.writeBytes(twoHyphens + boundary + lineEnd);
+
+                dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""
+
+                        + fileName + "\"" + lineEnd);
+
+
+
+                dos.writeBytes(lineEnd);
+
+
+
+                // create a buffer of  maximum size
+
+                bytesAvailable = fileInputStream.available();
+
+
+
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+
+                buffer = new byte[bufferSize];
+
+
+
+                // read file and write it into form...
+
+                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+
+
+                while (bytesRead > 0) {
+
+
+
+                    dos.write(buffer, 0, bufferSize);
+
+                    bytesAvailable = fileInputStream.available();
+
+                    bufferSize = Math.min(bytesAvailable, maxBufferSize);
+
+                    bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+
+
+                }
+
+
+
+                // send multipart form data necesssary after file data...
+
+                dos.writeBytes(lineEnd);
+
+                dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+
+
+                // Responses from the server (code and message)
+
+                serverResponseCode = conn.getResponseCode();
+
+                String serverResponseMessage = conn.getResponseMessage();
+
+
+                Log.i("uploadFile", "HTTP Response is : "
+
+                        + serverResponseMessage + ": " + serverResponseCode);
+
+
+
+                if(serverResponseCode == 200){
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            String msg = "File Upload Completed.\n\n See uploaded file here : \n\n"
+                                    +uploadFileName;
+
+                            messageText.setText(msg);
+
+                            Toast.makeText(BadgeActivity.this, "File Upload Complete.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                //close the streams //
+                fileInputStream.close();
+                dos.flush();
+                dos.close();
+            } catch (MalformedURLException ex) {
+
+                dialog.dismiss();
+                ex.printStackTrace();
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        messageText.setText("MalformedURLException Exception : check script url.");
+                        Toast.makeText(BadgeActivity.this, "MalformedURLException",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+                Log.e("Upload file to server", "error: " + ex.getMessage(), ex);
+
+            } catch (Exception e) {
+                dialog.dismiss();
+
+                e.printStackTrace();
+
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        messageText.setText("Got Exception : see logcat ");
+                        Toast.makeText(BadgeActivity.this, "Got Exception : see logcat ",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                Log.e("Upload file to server Exception", "Exception : "
+                        + e.getMessage(), e);
+            }
+            dialog.dismiss();
+            return serverResponseCode;
+        } // End else block
     }
+
 
     public void clickBtn(View view) {
+
+        //갤러리 or 사진 앱 실행하여 사진을 선택하도록..
         Intent intent= new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent,10);
@@ -111,43 +367,8 @@ public class BadgeActivity extends AppCompatActivity {
     }
 
     public void clickUpload(View view) {
-        //서버로 보낼 데이터
-        String name= etName.getText().toString();
-        String msg= etMsg.getText().toString();
-
-        //안드로이드에서 보낼 데이터를 받을 php 서버 주소
-        String serverUrl="http://skysea750.dothome.co.kr/insertDB.php";
-
-        //Volley plus Library를 이용해서
-        //파일 전송하도록..
-        //Volley+는 AndroidStudio에서 검색이 안됨 [google 검색 이용]
-
-        //파일 전송 요청 객체 생성[결과를 String으로 받음]
-        SimpleMultiPartRequest smpr= new SimpleMultiPartRequest(Request.Method.POST, serverUrl, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                new AlertDialog.Builder(BadgeActivity.this).setMessage("응답:"+response).create().show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(BadgeActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        //요청 객체에 보낼 데이터를 추가
-        smpr.addStringParam("name", name);
-        smpr.addStringParam("msg", msg);
-        //이미지 파일 추가
-        smpr.addFile("img", imgPath);
-
-        //요청객체를 서버로 보낼 우체통 같은 객체 생성
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        requestQueue.add(smpr);
-
     }
 
     public void clickLoad(View view) {
     }
 }
-

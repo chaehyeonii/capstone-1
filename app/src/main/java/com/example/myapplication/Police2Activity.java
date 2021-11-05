@@ -139,6 +139,7 @@ public class Police2Activity extends Activity{
 
                                 //목록에 이미지 불러오기 위한 코드
                                 StringBuffer image = new StringBuffer();
+                                StringBuffer lstLctNm = new StringBuffer();
                                 String queryUrl = "http://apis.data.go.kr/1320000/LostGoodsInfoInqireService/getLostGoodsDetailInfo?"//요청 URL
                                         + "ATC_ID=" + parser.getText() + "&ServiceKey=" + dataKey;
 
@@ -168,6 +169,9 @@ public class Police2Activity extends Activity{
                                                 else if (tag2.equals("lstFilePathImg")) {
                                                     xpp2.next();
                                                     image.append(xpp2.getText());
+                                                }else if (tag2.equals("lstLctNm")) {
+                                                    xpp2.next();
+                                                    lstLctNm.append(xpp2.getText());
                                                 }
                                                 break;
 
@@ -187,6 +191,7 @@ public class Police2Activity extends Activity{
                                     // TODO Auto-generated catch blocke.printStackTrace();
                                 }
                                 item.setlstFilePathImg(image.toString());//StringBuffer 문자열 객체 반환
+                                item.setlstLctNm(lstLctNm.toString());//StringBuffer 문자열 객체 반환
 
                             } else if(b_lstPlace) {
                                 item.setlstPlace(parser.getText());
