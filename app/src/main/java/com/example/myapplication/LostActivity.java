@@ -5,8 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,7 +19,9 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 public class LostActivity extends Activity {
@@ -62,7 +62,7 @@ public class LostActivity extends Activity {
         setContentView(R.layout.activity_police2);
 
 
-        adapter = new Police2_Adapter(getApplicationContext(), list);
+        adapter = new Police2_Adapter(getApplicationContext(), arraylist);
 
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -92,35 +92,6 @@ public class LostActivity extends Activity {
         MyAsyncTask myAsyncTask = new MyAsyncTask();
         myAsyncTask.execute();
 
-        //arraylist.addAll(list);
-
-
-        //-------검색
-        search.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-               // adapter.filterList().filter(charSequence.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-                //String searchText = search.getText().toString();
-                //searchFilter(searchText);
-
-                // input창에 문자를 입력할때마다 호출된다.
-                // search 메소드를 호출한다.
-                String text = search.getText().toString();
-                search(text);
-
-            }
-        });
-
 
         //-----무한 스크롤--------
         nestedScrollView=findViewById(R.id.scroll_view);
@@ -134,12 +105,60 @@ public class LostActivity extends Activity {
                     page++;
                     progressBar.setVisibility(View.VISIBLE);
                     getXmlData(page, limit);
-
                 }
             }
         });
 
+        /*
+        if(search.getText().toString()!=null) {
+            //--------------------검색
+            arraylist.addAll(list);
+            list.clear();
+            for (int i = 0; i < arraylist.size(); i++) {
+                // arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
+                if (arraylist.get(i).getlstPrdtNm().toLowerCase().contains(search.getText().toString())) {
+                    // 검색된 데이터를 리스트에 추가한다.
+                    list.add(arraylist.get(i));
+                }
+            }
+
+            adapter.notifyDataSetChanged();
+        }
+
+         */
+
+        /*
+        arraylist.addAll(list);
+        //-------검색
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                // adapter.filterList().filter(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                //String searchText = search.getText().toString();
+                //searchFilter(searchText);
+
+                // input창에 문자를 입력할때마다 호출된다.
+                // search 메소드를 호출한다.
+                String text = search.getText().toString();
+                search(text);
+            }
+        });
+        */
+
+
+
     }
+
 
     /*
 
@@ -195,6 +214,8 @@ public class LostActivity extends Activity {
     void getXmlData(int page, int limit){
         MyAsyncTask myAsyncTask = new MyAsyncTask();
         myAsyncTask.execute();
+
+        //arraylist.addAll(list);
     }
 
 
@@ -219,14 +240,13 @@ public class LostActivity extends Activity {
 
             //1번 분실물 등록날짜(시작일, 종료일), 상위 하위 물품 코드(대분류, 중분류), 분실지역 코드드
             //2번 분실지역명, 분실물명
-            //String str= edit.getText().toString();//EditText에 작성된 Text얻어오기
-            // String name = null;//약 이름으로 검색하기 위해 null로 초기화해줌
-
-            // try {//인코딩을 위한 try catch문
-            //    name = URLEncoder.encode(str, "UTF-8");//Edit창에 적은 String값을 인코딩 해줌
-            //} catch (UnsupportedEncodingException e) {
-            //    e.printStackTrace();
-            //}
+            String str= search.getText().toString();//EditText에 작성된 Text얻어오기
+            String name = null;//약 이름으로 검색하기 위해 null로 초기화해줌
+            try {//인코딩을 위한 try catch문
+                name = URLEncoder.encode(str, "UTF-8");//Edit창에 적은 String값을 인코딩 해줌
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
 
             requestUrl = "http://apis.data.go.kr/1320000/LostGoodsInfoInqireService/getLostGoodsInfoAccToClAreaPd?serviceKey=" +dataKey
                     + "&pageNo="+page+"&numOfRows="+limit;
@@ -258,7 +278,8 @@ public class LostActivity extends Activity {
                         case XmlPullParser.END_TAG:
                             if(parser.getName().equals("item") && item != null) {
 
-                                list.add(item);
+                                    list.add(item);
+
                             }
                             break;
                         case XmlPullParser.START_TAG:
@@ -336,8 +357,8 @@ public class LostActivity extends Activity {
                                 item.setlstPlace(parser.getText());
                                 b_lstPlace = false;
                             } else if (b_lstPrdtNm) {
-                                item.setlstPrdtNm(parser.getText());
-                                b_lstPrdtNm = false;
+                                    item.setlstPrdtNm(parser.getText());
+                                    b_lstPrdtNm = false;
                             } else if(b_lstYmd) {
                                 item.setlstYmd(parser.getText());
                                 b_lstYmd = false;
@@ -350,29 +371,9 @@ public class LostActivity extends Activity {
                 e.printStackTrace();
             }
 
-            return null;
-        }
-        //------------------------------
-
-
-        @Override
-        protected void onPostExecute(String s) {//adapter를 연결해주는 부분. 이 코드를 이용해 AsyncTask를 실행한다.
-            //결과 파라미터를 리턴하면서 그 리턴값을 통해 스레드 작업이 끝났을 때의 동작을 구현합니다.
-
-            super.onPostExecute(s);
-
-            //검색 결과가 다 뜨면 progressDialog를 없앰
-            progressDialog.dismiss();
-
-            //어답터 연결
-            //Police2_Adapter adapter = new Police2_Adapter(getApplicationContext(), list);
-            recyclerView.setAdapter(adapter);
-            adapter.notifyDataSetChanged();//어댑터에 연결된 항목들을 갱신함.
-
-
-            arraylist.addAll(list);
             /*
-            //-------검색
+            arraylist.addAll(list);
+
             search.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -397,12 +398,103 @@ public class LostActivity extends Activity {
 
                 }
             });
+            */
+
+            //---------test1-----------
+            //arraylist.addAll(list);
+            /*
+            list.clear();
+            for(int i = 0;i < arraylist.size(); i++)
+            {
+                // arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
+                if (arraylist.get(i).getlstPrdtNm().toLowerCase().contains("카드지갑"))
+                {
+                    // 검색된 데이터를 리스트에 추가한다.
+                    list.add(arraylist.get(i));
+                }
+            }
 
              */
 
 
 
+            return null;
+        }
+        //------------------------------
 
+
+        @Override
+        protected void onPostExecute(String s) {//adapter를 연결해주는 부분. 이 코드를 이용해 AsyncTask를 실행한다.
+            //결과 파라미터를 리턴하면서 그 리턴값을 통해 스레드 작업이 끝났을 때의 동작을 구현합니다.
+
+            super.onPostExecute(s);
+
+            //검색 결과가 다 뜨면 progressDialog를 없앰
+            progressDialog.dismiss();
+
+            //어답터 연결
+            //Police2_Adapter adapter = new Police2_Adapter(getApplicationContext(), list);
+            recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+            //---------------------검색------------------
+            String test = "";
+            //---------test1-----------
+            //arraylist.addAll(list);
+            if(test.equals("")){
+                arraylist.clear();
+                arraylist.addAll(list);
+
+            }else {
+                arraylist.clear();
+                for (int i = 0; i < list.size(); i++) {
+                    // arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
+                    if (list.get(i).getlstPrdtNm().toLowerCase().contains(test)) {
+                        // 검색된 데이터를 리스트에 추가한다.
+                        arraylist.add(list.get(i));
+                    }
+                }
+            }
+
+            //--------------------------------------------
+
+
+
+
+            adapter.notifyDataSetChanged();//어댑터에 연결된 항목들을 갱신함.
+
+
+
+            /*
+            //-------검색
+            arraylist.addAll(list);
+
+            search.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                    //String searchText = search.getText().toString();
+                    //searchFilter(searchText);
+
+                    // input창에 문자를 입력할때마다 호출된다.
+                    // search 메소드를 호출한다.
+                    String text = search.getText().toString();
+                    search_method(text);
+
+                }
+            });
+
+             */
 
         }
     }
@@ -420,7 +512,7 @@ public class LostActivity extends Activity {
     }
 
     // 검색을 수행하는 메소드
-    public void search(String charText) {
+    public void search_method(String charText) {
 
         // 문자 입력시마다 리스트를 지우고 새로 뿌려준다.
         list.clear();

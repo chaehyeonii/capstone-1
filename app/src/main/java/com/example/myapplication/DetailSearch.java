@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -158,6 +159,14 @@ public class DetailSearch extends Activity {
         String search_date1_data = search_date1.getText().toString();
         String search_date2_data = search_date2.getText().toString();
 
+        Intent intent=new Intent(this,LostActivity.class);
+        intent.putExtra("search_category_data",search_category_data);
+        intent.putExtra("search_color_data",search_color_data);
+        intent.putExtra("search_local_data",search_local_data);
+        intent.putExtra("search_place_data",search_place_data);
+        intent.putExtra("search_date1_data",search_date1_data);
+        intent.putExtra("search_date2_data",search_date2_data);
+        startActivity(intent);
         /*
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
