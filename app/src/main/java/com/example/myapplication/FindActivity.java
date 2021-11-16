@@ -7,9 +7,14 @@
 package com.example.myapplication;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,9 +31,20 @@ public class FindActivity extends Activity{
     public String dataKey = "%2Byy%2BAg9TKR9ECCv0yM0FkpCbZUyhIAsutQKN5U%2BzwQLeB6cWr1mrzLwH68caK39fPNG1YDiZGj3uv3AjFg6mVw%3D%3D";
     private String requestUrl;
     private String requestUrl2;
-    ArrayList<Find_Item> list = null;
+    ArrayList<Find_Item> list = new ArrayList<Find_Item>();
     Find_Item item = null;
     RecyclerView recyclerView;
+    int page=1;
+    int limit=30;
+
+    EditText search;
+
+    //-------무한 스크롤------------
+    NestedScrollView nestedScrollView;
+    ProgressBar progressBar;
+
+    //로딩중을 띄워주는 progressDialog
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -48,6 +64,35 @@ public class FindActivity extends Activity{
         //AsyncTask
         MyAsyncTask myAsyncTask = new MyAsyncTask();
         myAsyncTask.execute();
+
+        // progressDialog 객체 선언
+        progressDialog = new ProgressDialog(this);
+
+        //검색
+        search=(EditText)findViewById(R.id.search);
+
+        //-----무한 스크롤--------
+        nestedScrollView=findViewById(R.id.scroll_view);
+        progressBar=findViewById(R.id.progress_bar);
+
+
+        nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener(){
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY){
+                if(scrollY==v.getChildAt(0).getMeasuredHeight()-v.getMeasuredHeight()){
+                    page++;
+                    progressBar.setVisibility(View.VISIBLE);
+                    getXmlData(page, limit);
+
+                    //myAsyncTask.execute();
+                }
+            }
+        });
+    }
+
+    void getXmlData(int page, int limit){
+        FindActivity.MyAsyncTask myAsyncTask = new FindActivity.MyAsyncTask();
+        myAsyncTask.execute();
     }
 
     public class MyAsyncTask extends AsyncTask<String, Void, String> {
@@ -55,7 +100,8 @@ public class FindActivity extends Activity{
         @Override
         protected String doInBackground(String... strings) {
 
-            requestUrl = "http://apis.data.go.kr/1320000/LosfundInfoInqireService/getLosfundInfoAccToClAreaPd?serviceKey=" +dataKey+ "&pageNo=1&numOfRows=30";
+            requestUrl = "http://apis.data.go.kr/1320000/LosfundInfoInqireService/getLosfundInfoAccToClAreaPd?serviceKey=" +dataKey
+                    + "&pageNo="+page+"&numOfRows="+limit;
             try {
                 boolean b_atcId = false;
                 boolean b_depPlace =false;
@@ -76,7 +122,7 @@ public class FindActivity extends Activity{
                 while(eventType != XmlPullParser.END_DOCUMENT){
                     switch (eventType){
                         case XmlPullParser.START_DOCUMENT:
-                            list = new ArrayList<Find_Item>();
+                            //list = new ArrayList<Find_Item>();
                             break;
                         case XmlPullParser.END_DOCUMENT:
                             break;

@@ -21,6 +21,8 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
     private ArrayList<Police2_Item> mList;
     private LayoutInflater mInflate;
     private Context mContext;
+    //---추가
+    private MyViewHolder viewHolder;
 
     public Police2_Adapter(Context context, ArrayList<Police2_Item> itmes) {
         this.mList = itmes;
@@ -71,6 +73,27 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
     }
     //----------------------------------------
 
+    //다른 검색 기능
+
+    public View getView(int position, View convertView, ViewGroup viewGroup) {
+        if(convertView == null){
+            convertView = mInflate.inflate(R.layout.activity_police2_item,null);
+
+            viewHolder = new MyViewHolder(convertView);
+            viewHolder.lstPrdtNm = (TextView) convertView.findViewById(R.id.tv_lstPrdtNm);
+
+            convertView.setTag(viewHolder);
+        }else{
+            viewHolder = (MyViewHolder)convertView.getTag();
+        }
+
+        // 리스트에 있는 데이터를 리스트뷰 셀에 뿌린다.
+        viewHolder.lstPrdtNm.setText(mList.get(position).lstPrdtNm);
+
+        return convertView;
+    }
+    //---------------------------------------
+
     //ViewHolder
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView atcId;
@@ -89,9 +112,6 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
             lstYmd = itemView.findViewById(R.id.tv_lstYmd);
             lstLctNm = itemView.findViewById(R.id.tv_lstLctNm);
             imageView2=itemView.findViewById(R.id.imageView2);
-
-            //imageView2.setBackground(new ShapeDrawable(new OvalShape()));
-            //imageView2.setClipToOutline(true);
 
 
             //click

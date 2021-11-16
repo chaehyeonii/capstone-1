@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -67,7 +68,7 @@ public class HomeActivity extends Activity {
 
     //url 연결 링크, 가져온 주소 값
     String[] address;
-    String url_bus="", url_taxi="", url_subway="";
+    String url_bus_in="", url_bus_out="", url_taxi_private="", url_taxi_corporate="", url_subway="";
     ArrayList<HashMap<String, String>> mArrayList=new ArrayList<>();
     private static final String TAG_region = "region";
     private static final String TAG_bus_in = "bus_in";
@@ -99,6 +100,97 @@ public class HomeActivity extends Activity {
         //Button button_taxi = findViewById(R.id.button_taxi); //택시 url 연결 버튼 가져오기
         //Button button_bus = findViewById(R.id.button_bus); //버스 url 연결 버튼 가져오기
 
+        //--------대중교통 url 연결 버튼-------------------
+        ImageButton button_bus = findViewById(R.id.button_bus); //습득물 찾기
+        button_bus.setBackgroundResource(R.drawable.bus);
+        button_bus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                final PopupMenu popup_menu_bus = new PopupMenu(getApplicationContext(),view);
+                getMenuInflater().inflate(R.menu.popup_menu_bus,popup_menu_bus.getMenu());
+                popup_menu_bus.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        if (menuItem.getItemId() == R.id.action_1){
+                            if(url_bus_in.equals("")){
+                                noAddress(); //주소 미입력 시, 안내창
+                            }else if(url_bus_in.equals("NULL")){
+                                noProvide(); //해당 지역 url이 NULL일 시, 서비스 제공하지 않는 지역이라고 안내문구
+                            }else {
+                                Intent intent_bus_in = new Intent(Intent.ACTION_VIEW, Uri.parse(url_bus_in));
+                                startActivity(intent_bus_in);
+                            }
+                        }else if (menuItem.getItemId() == R.id.action_2){
+                            if(url_bus_out.equals("")){
+                                noAddress(); //주소 미입력 시, 안내창
+                            }else if(url_bus_out.equals("NULL")){
+                                noProvide(); //해당 지역 url이 NULL일 시, 서비스 제공하지 않는 지역이라고 안내문구
+                            }else {
+                                Intent intent_bus_out = new Intent(Intent.ACTION_VIEW, Uri.parse(url_bus_out));
+                                startActivity(intent_bus_out);
+                            }
+                        }
+                        return false;
+                    }
+                });
+                popup_menu_bus.show();
+            }
+        });
+
+        ImageButton button_taxi = findViewById(R.id.button_taxi); //습득물 찾기
+        button_taxi.setBackgroundResource(R.drawable.taxi);
+        button_taxi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                final PopupMenu popup_menu_taxi = new PopupMenu(getApplicationContext(),view);
+                getMenuInflater().inflate(R.menu.popup_menu_taxi,popup_menu_taxi.getMenu());
+                popup_menu_taxi.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        if (menuItem.getItemId() == R.id.action_1){
+                            if(url_taxi_private.equals("")){
+                                noAddress(); //주소 미입력 시, 안내창
+                            }else if(url_taxi_private.equals("NULL")){
+                                noProvide(); //해당 지역 url이 NULL일 시, 서비스 제공하지 않는 지역이라고 안내문구
+                            }else {
+                                Intent intent_taxi_private = new Intent(Intent.ACTION_VIEW, Uri.parse(url_taxi_private));
+                                startActivity(intent_taxi_private);
+                            }
+                        }else if (menuItem.getItemId() == R.id.action_2){
+                            if(url_taxi_corporate.equals("")){
+                                noAddress(); //주소 미입력 시, 안내창
+                            }else if(url_taxi_corporate.equals("NULL")){
+                                noProvide(); //해당 지역 url이 NULL일 시, 서비스 제공하지 않는 지역이라고 안내문구
+                            }else {
+                                Intent intent_taxi_corporate = new Intent(Intent.ACTION_VIEW, Uri.parse(url_taxi_corporate));
+                                startActivity(intent_taxi_corporate);
+                            }
+                        }
+                        return false;
+                    }
+                });
+                popup_menu_taxi.show();
+            }
+        });
+
+        ImageButton button_subway = findViewById(R.id.button_subway); //습득물 찾기
+        button_subway.setBackgroundResource(R.drawable.subway);
+        button_subway.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                            if(url_subway.equals("")){
+                                noAddress(); //주소 미입력 시, 안내창
+                            }else if(url_subway.equals("NULL")){
+                                noProvide(); //해당 지역 url이 NULL일 시, 서비스 제공하지 않는 지역이라고 안내문구
+                            }else {
+                                Intent intent_subway = new Intent(Intent.ACTION_VIEW, Uri.parse(url_subway));
+                                startActivity(intent_subway);
+                            }
+                        }
+                });
+
+
+        //-----------------------------------------------------------
 
 
 
@@ -241,11 +333,11 @@ public class HomeActivity extends Activity {
                             }
                             if(success){
                                 Toast.makeText(getApplicationContext(),"주소입력 성공",Toast.LENGTH_SHORT).show();
-                                url_bus=bus_out;
-                                url_taxi=taxi_corporate;
+                                url_bus_in=bus_in;
+                                url_bus_out=bus_out;
+                                url_taxi_private=taxi_private;
+                                url_taxi_corporate=taxi_corporate;
                                 url_subway=subway;
-                                //TextView textView5=findViewById(R.id.textView5);
-                                //textView5.setText(url_bus);
 
                             }else{
                                 Toast.makeText(getApplicationContext(),"주소입력 실패",Toast.LENGTH_SHORT).show();
@@ -261,27 +353,6 @@ public class HomeActivity extends Activity {
                 RequestRegion RequestRegion = new RequestRegion( region1,region2, responseListener);
                 RequestQueue queue = Volley.newRequestQueue( HomeActivity.this );
                 queue.add( RequestRegion );
-
-
-                /*
-
-                if (address[1].equals("서울") ){
-                    url_bus="https://www.seoul.go.kr/v2012/find.html?m=3";
-                    url_taxi="http://www.stj.or.kr/";
-                    url_subway="https://smrte.co.kr/support/lost";
-                } else if (address[1].equals("대구")|address[1].equals("대구광역시")){
-                    url_bus="https://businfo.daegu.go.kr:8095/dbms_web/content/customer/found";
-                    url_taxi="http://www.dgt.or.kr/popup/lost_tab_100420.html";
-                    url_subway="http://www.dtro.or.kr/open_content_new/ko/sub_page/page.php?mnu_puid1=1&mnu_uid=13&mnu_puid2=12";
-                } else if(address[1].equals("부산")|address[1].equals("부산광역시")) {
-                    url_bus = "http://www.busanbus.or.kr/busanbus/lost";
-                    url_taxi = "http://www.bgtj.or.kr/webapps/freezone/loss_reply_list.jsp?table_name=TB_BBS_REPLY&boardtype=1";
-                    url_subway = "http://www.humetro.busan.kr/homepage/default/lost/list.do?menu_no=1001010402#N";
-                }
-
-
-                 */
-
             }
         });
 
@@ -332,41 +403,31 @@ public class HomeActivity extends Activity {
 
 
         //--------검색 팝업-------------
-        findViewById(R.id.button_bus).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.button_bus2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 final PopupMenu popup_menu = new PopupMenu(getApplicationContext(),view);
-                getMenuInflater().inflate(R.menu.popup_menu,popup_menu.getMenu());
+                getMenuInflater().inflate(R.menu.popup_menu_bus,popup_menu.getMenu());
                 popup_menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        if (menuItem.getItemId() == R.id.action_bus){
-                            if(url_bus.equals("")){
+                        if (menuItem.getItemId() == R.id.action_1){
+                            if(url_bus_in.equals("")){
                                 noAddress(); //주소 미입력 시, 안내창
-                            }else if(url_bus.equals("NULL")){
+                            }else if(url_bus_in.equals("NULL")){
                                 noProvide(); //해당 지역 url이 NULL일 시, 서비스 제공하지 않는 지역이라고 안내문구
                             }else {
-                                Intent intent_bus = new Intent(Intent.ACTION_VIEW, Uri.parse(url_bus));
+                                Intent intent_bus = new Intent(Intent.ACTION_VIEW, Uri.parse(url_bus_in));
                                 startActivity(intent_bus);
                             }
-                        }else if (menuItem.getItemId() == R.id.action_taxi){
-                            if(url_taxi.equals("")){
+                        }else if (menuItem.getItemId() == R.id.action_2){
+                            if(url_taxi_private.equals("")){
                                 noAddress(); //주소 미입력 시, 안내창
-                            }else if(url_taxi.equals("NULL")){
+                            }else if(url_taxi_private.equals("NULL")){
                                 noProvide(); //해당 지역 url이 NULL일 시, 서비스 제공하지 않는 지역이라고 안내문구
                             }else {
-                                Intent intent_taxi = new Intent(Intent.ACTION_VIEW, Uri.parse(url_taxi));
+                                Intent intent_taxi = new Intent(Intent.ACTION_VIEW, Uri.parse(url_taxi_private));
                                 startActivity(intent_taxi);
-                            }
-                        }else if (menuItem.getItemId() == R.id.action_subway){
-                            if(url_subway.equals("")){
-                                noAddress(); //주소 미입력 시, 안내창
-                            }else if(url_subway.equals("NULL")){
-                                noProvide(); //해당 지역 url이 NULL일 시, 서비스 제공하지 않는 지역이라고 안내문구
-                            }
-                            else{
-                                Intent intent_subway = new Intent(Intent.ACTION_VIEW, Uri.parse(url_subway));
-                                startActivity(intent_subway);
                             }
                         }
                         return false;
@@ -536,11 +597,11 @@ public class MyAsyncTask extends AsyncTask<String, Void, String> {
                     }
                     if(success){
                         Toast.makeText(getApplicationContext(),"주소입력 성공",Toast.LENGTH_SHORT).show();
-                        url_bus=bus_out;
-                        url_taxi=taxi_corporate;
+                        url_bus_in=bus_in;
+                        url_bus_out=bus_out;
+                        url_taxi_private=taxi_private;
+                        url_taxi_corporate=taxi_corporate;
                         url_subway=subway;
-                        //TextView textView5=findViewById(R.id.textView5);
-                        //textView5.setText(url_bus);
 
                     }else{
                         Toast.makeText(getApplicationContext(),"주소입력 실패",Toast.LENGTH_SHORT).show();
@@ -712,26 +773,7 @@ public class MyAsyncTask extends AsyncTask<String, Void, String> {
         builder.create().show();
     }
 
-/*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case GPS_ENABLE_REQUEST_CODE:
 
-                //사용자가 GPS 활성 시켰는지 검사
-                if (checkLocationServicesStatus()) {
-                    if (checkLocationServicesStatus()) {
-                        Log.d("@@@", "onActivityResult : GPS 활성화 되있음");
-                        checkRunTimePermission();
-                        return;
-                    }
-                }
-                break;
-        }
-    }
-
- */
 
     public boolean checkLocationServicesStatus() {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
