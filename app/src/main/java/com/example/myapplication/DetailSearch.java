@@ -36,6 +36,8 @@ public class DetailSearch extends Activity {
     private static final String TAG_GetPostMoreInfo ="GetPostMoreInfoData";
     private static final String TAG_GetPostImg ="GetPostImgData";
 
+    //int code;
+
     ArrayList<HashMap<String, String>> mArrayList;
     ListView mlistView;
 
@@ -62,6 +64,8 @@ public class DetailSearch extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Intent intent=new Intent(this,LostActivity.class);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_search);
 
@@ -78,6 +82,7 @@ public class DetailSearch extends Activity {
             @Override//선택되면
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 color.setText(colorItems[position]);
+                intent.putExtra("search_color_data",colorItems[position]);
             }
             @Override//아무것도 선택 안되면
             public void onNothingSelected(AdapterView<?> parent) {
@@ -97,6 +102,7 @@ public class DetailSearch extends Activity {
             @Override//선택되면
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 category.setText(categoryItems[position]);
+                intent.putExtra("search_category_data",categoryItems[position]);
             }
             @Override//아무것도 선택 안되면
             public void onNothingSelected(AdapterView<?> parent) {
@@ -116,6 +122,7 @@ public class DetailSearch extends Activity {
             @Override//선택되면
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 local.setText(localItems[position]);
+                intent.putExtra("search_local_data",localItems[position]);
             }
             @Override//아무것도 선택 안되면
             public void onNothingSelected(AdapterView<?> parent) {
@@ -127,18 +134,66 @@ public class DetailSearch extends Activity {
         Button dateBtn1=findViewById(R.id.searchSelectDateBtn1);
         dateBtn1.setOnClickListener(view -> {
             Calendar calender = Calendar.getInstance();
-            new DatePickerDialog(this, dateSetListener1, calender.get(Calendar.YEAR), calender.get(Calendar.MONTH), calender.get(Calendar.DATE)).show();});
+            new DatePickerDialog(this, dateSetListener1, calender.get(Calendar.YEAR), calender.get(Calendar.MONTH), calender.get(Calendar.DATE)).show();
+            String startdate1 = String.format("%d%d%d",calender.get(Calendar.YEAR),calender.get(Calendar.MONTH),calender.get(Calendar.DATE));
+            intent.putExtra("search_date1_data",startdate1);
+        });
 
         Button dateBtn2=findViewById(R.id.searchSelectDateBtn2);
         dateBtn2.setOnClickListener(view -> {
             Calendar calender = Calendar.getInstance();
-            new DatePickerDialog(this, dateSetListener2, calender.get(Calendar.YEAR), calender.get(Calendar.MONTH), calender.get(Calendar.DATE)).show();});
+            new DatePickerDialog(this, dateSetListener2, calender.get(Calendar.YEAR), calender.get(Calendar.MONTH), calender.get(Calendar.DATE)).show();
+            String startdate2 = String.format("%d%d%d",calender.get(Calendar.YEAR),calender.get(Calendar.MONTH),calender.get(Calendar.DATE));
+            intent.putExtra("search_date2_data",startdate2);
+        });
 
         mArrayList = new ArrayList<>();
 
+        TextView search_category, search_color, search_local, search_date1, search_date2;
+        EditText search_place;
+        search_category = findViewById(R.id.searchGetCategoryData);
+        search_color = findViewById(R.id.searchGetColorData);
+        search_local = findViewById(R.id.searchGetLocalData);
+        search_place = findViewById(R.id.searchGetPlaceData);
+        search_date1 = findViewById(R.id.searchGetDateData1);
+        search_date2 = findViewById(R.id.searchGetDateData2);
+
+        String search_category_data = search_category.getText().toString();
+        String search_color_data = search_color.getText().toString();
+        String search_local_data = search_local.getText().toString();
+        String search_place_data = search_place.getText().toString();
+        String search_date1_data = search_date1.getText().toString();
+        String search_date2_data = search_date2.getText().toString();
+
+        //Intent intent=new Intent(this,LostActivity.class);
+        //intent.putExtra("search_category_data",search_category_data);
+        intent.putExtra("search_color_data",search_color_data);
+        //intent.putExtra("search_local_data",search_local_data);
+        intent.putExtra("search_place_data",search_place_data);
+        //intent.putExtra("search_date1_data",search_date1_data);
+        intent.putExtra("search_date2_data",search_date2_data);
+
+
+        //setResult(RESULT_OK, intent);
+        //finish();
+
+
+        //Intent intent=new Intent(this,LostActivity.class);
         //검색 버튼 클릭 이벤트
         Button searchLostBtn=findViewById(R.id.searchGetFunctionBtn);
-        searchLostBtn.setOnClickListener(view -> searchGetData());
+        //searchLostBtn.setOnClickListener(view -> searchGetData());
+        searchLostBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent_searchLostBtn = new Intent(getApplicationContext(), LostActivity.class);
+                //startActivity(intent_searchLostBtn);
+                //searchGetData();
+                setResult(RESULT_OK,intent);
+                finish();
+            }
+        });
+
+
     }
 
     public void searchGetData(){
@@ -166,7 +221,10 @@ public class DetailSearch extends Activity {
         intent.putExtra("search_place_data",search_place_data);
         intent.putExtra("search_date1_data",search_date1_data);
         intent.putExtra("search_date2_data",search_date2_data);
-        startActivity(intent);
+        //startActivity(intent);
+        //setResult(RESULT_OK,intent);
+        //finish();
+
         /*
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {

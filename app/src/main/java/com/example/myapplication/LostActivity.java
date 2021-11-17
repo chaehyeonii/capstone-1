@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,13 +55,29 @@ public class LostActivity extends Activity {
 
     Button button_search;
 
+    //검색
+    String search_category_data = "";   //물품 분류명 prdtClNm
+    String search_color_data = "";
+    String search_local_data = "";  //분실 지역명 lstLctNm
+    String search_place_data = "";  //분실 지역명(장소) lstPlace
+    String search_date1_data =""; //분실물 등록 날짜 START_YMD
+    String search_date2_data = "";  //분실물 등록 날짜 END_YMD
 
+
+    /*
+    String search_category_data = intent.getStringExtra("search_category_data");    //물품 분류명 prdtClNm
+    String search_color_data = intent.getStringExtra("search_color_data");
+    String search_local_data = intent.getStringExtra("search_local_data");  //분실 지역명 lstLctNm
+    String search_place_data = intent.getStringExtra("search_place_data");  //분실 지역명(장소) lstPlace
+    String search_date1_data = intent.getStringExtra("search_date1_data");  //분실물 등록 날짜 START_YMD
+    String search_date2_data = intent.getStringExtra("search_date2_data");  //분실물 등록 날짜 END_YMD
+        */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_police2);
-
 
         adapter = new Police2_Adapter(getApplicationContext(), arraylist);
 
@@ -78,8 +95,21 @@ public class LostActivity extends Activity {
         progressDialog = new ProgressDialog(this);
 
         //검색
+        //Intent intent = getIntent();
         search=(EditText)findViewById(R.id.search);
         button_search=findViewById(R.id.button_search);
+
+        button_search.setOnClickListener(new View.OnClickListener() { //경찰청 버튼 클릭 시 화면 전환
+            @Override
+            public void onClick(View v) {
+                Intent intent_search = new Intent(getApplicationContext(), DetailSearch.class);
+                //startActivity(intent_search);
+                startActivityForResult(intent_search,3000);
+            }
+        });
+
+
+        /*
         button_search.setOnClickListener(new View.OnClickListener() { //경찰청 버튼 클릭 시 화면 전환
             @Override
             public void onClick(View v) {
@@ -87,6 +117,8 @@ public class LostActivity extends Activity {
                 startActivity(intent_search);
             }
         });
+
+         */
 
         //AsyncTask
         MyAsyncTask myAsyncTask = new MyAsyncTask();
@@ -127,33 +159,6 @@ public class LostActivity extends Activity {
 
          */
 
-        /*
-        arraylist.addAll(list);
-        //-------검색
-        search.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // adapter.filterList().filter(charSequence.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-                //String searchText = search.getText().toString();
-                //searchFilter(searchText);
-
-                // input창에 문자를 입력할때마다 호출된다.
-                // search 메소드를 호출한다.
-                String text = search.getText().toString();
-                search(text);
-            }
-        });
-        */
 
 
 
@@ -211,6 +216,39 @@ public class LostActivity extends Activity {
         }
     }
 */
+
+
+    // DetailSearch 에서 처리된 결과를 받는 메소드
+    // 처리된 결과 코드 (resultCode) 가 RESULT_OK 이면 requestCode 를 판별해 결과 처리를 진행한다.
+    // DetailSerach 에서 처리 결과가 담겨온 데이터를 TextView 에 보여준다.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if(resultCode == RESULT_OK){
+            switch (requestCode){
+                // MainActivity 에서 요청할 때 보낸 요청 코드 (3000)
+                case 3000:
+                    //mainResultTv.setText(data.getStringExtra("result"));
+                    search_category_data = intent.getStringExtra("search_category_data");    //물품 분류명 prdtClNm
+                    search_color_data = intent.getStringExtra("search_color_data");
+                    search_local_data = intent.getStringExtra("search_local_data");  //분실 지역명 lstLctNm
+                    search_place_data = intent.getStringExtra("search_place_data");  //분실 지역명(장소) lstPlace
+                    search_date1_data = intent.getStringExtra("search_date1_data");  //분실물 등록 날짜 START_YMD
+                    search_date2_data = intent.getStringExtra("search_date2_data");  //분실물 등록 날짜 END_YMD
+                    Log.i("test", "data:" + search_category_data);
+                    Log.i("test", "data:" + search_color_data);
+                    Log.i("test", "data:" + search_local_data);
+                    Log.i("test", "data:" + search_place_data);
+                    Log.i("test", "data:" + search_date1_data);
+                    Log.i("test", "data:" + search_date2_data);
+
+                    break;
+            }
+        }
+    }
+
+
+
+
     void getXmlData(int page, int limit){
         MyAsyncTask myAsyncTask = new MyAsyncTask();
         myAsyncTask.execute();
@@ -400,24 +438,6 @@ public class LostActivity extends Activity {
             });
             */
 
-            //---------test1-----------
-            //arraylist.addAll(list);
-            /*
-            list.clear();
-            for(int i = 0;i < arraylist.size(); i++)
-            {
-                // arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
-                if (arraylist.get(i).getlstPrdtNm().toLowerCase().contains("카드지갑"))
-                {
-                    // 검색된 데이터를 리스트에 추가한다.
-                    list.add(arraylist.get(i));
-                }
-            }
-
-             */
-
-
-
             return null;
         }
         //------------------------------
@@ -439,22 +459,33 @@ public class LostActivity extends Activity {
 
             //---------------------검색------------------
             String test = "";
+            //search_category_data = intent.getStringExtra("search_category_data");    //물품 분류명 prdtClNm
+            //search_color_data = intent.getStringExtra("search_color_data");
+            //search_local_data = intent.getStringExtra("search_local_data");  //분실 지역명 lstLctNm
+           //search_place_data = intent.getStringExtra("search_place_data");  //분실 지역명(장소) lstPlace
+            //search_date1_data = intent.getStringExtra("search_date1_data");  //분실물 등록 날짜 START_YMD
+            //search_date2_data = intent.getStringExtra("search_date2_data");  //분실물 등록 날짜 END_YMD
+            Log.i("test", "data:" + search_local_data);
+
+
             //---------test1-----------
             //arraylist.addAll(list);
-            if(test.equals("")){
+
+            if (search_local_data.equals("")){
                 arraylist.clear();
                 arraylist.addAll(list);
-
-            }else {
+            }else{
                 arraylist.clear();
                 for (int i = 0; i < list.size(); i++) {
                     // arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
-                    if (list.get(i).getlstPrdtNm().toLowerCase().contains(test)) {
+                    if (list.get(i).getlstLctNm().toLowerCase().contains(search_local_data)) {
                         // 검색된 데이터를 리스트에 추가한다.
                         arraylist.add(list.get(i));
+                        Log.i("test", "OK");
                     }
                 }
             }
+
 
             //--------------------------------------------
 
