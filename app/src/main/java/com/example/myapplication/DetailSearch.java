@@ -41,27 +41,6 @@ public class DetailSearch extends Activity {
     ArrayList<HashMap<String, String>> mArrayList;
     ListView mlistView;
 
-    //날짜 선택 구현
-    DatePickerDialog.OnDateSetListener dateSetListener1=
-            new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker datePicker, int yy, int mm, int dd) {
-                    //DatePicker 선택한 날짜를 TextView 에 설정
-                    TextView dateView=findViewById(R.id.searchGetDateData1);
-                    dateView.setText(String.format("%d/%d/%d",yy,mm+1,dd));
-                }
-            };
-
-    DatePickerDialog.OnDateSetListener dateSetListener2=
-            new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker datePicker, int yy, int mm, int dd) {
-                    //DatePicker 선택한 날짜를 TextView 에 설정
-                    TextView dateView=findViewById(R.id.searchGetDateData2);
-                    dateView.setText(String.format("%d/%d/%d",yy,mm+1,dd));
-                }
-            };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent=new Intent(this,LostActivity.class);
@@ -69,6 +48,30 @@ public class DetailSearch extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_search);
 
+        //날짜 선택 구현
+        DatePickerDialog.OnDateSetListener dateSetListener1=
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int yy, int mm, int dd) {
+                        //DatePicker 선택한 날짜를 TextView 에 설정
+                        TextView dateView=findViewById(R.id.searchGetDateData1);
+                        dateView.setText(String.format("%d/%d/%d",yy,mm+1,dd));
+                        String startdate1 = String.format("%d-%d-%d",yy,mm+1,dd);
+                        intent.putExtra("search_date1_data",startdate1);
+                    }
+                };
+
+        DatePickerDialog.OnDateSetListener dateSetListener2=
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int yy, int mm, int dd) {
+                        //DatePicker 선택한 날짜를 TextView 에 설정
+                        TextView dateView=findViewById(R.id.searchGetDateData2);
+                        dateView.setText(String.format("%d/%d/%d",yy,mm+1,dd));
+                        String startdate2 = String.format("%d-%d-%d",yy,mm+1,dd);
+                        intent.putExtra("search_date2_data",startdate2);
+                    }
+                };
 
         //colorSpinner 처리 (색상선택처리)
         Spinner colorSpin = (Spinner)findViewById(R.id.searchGetColorSpinner);
@@ -127,6 +130,7 @@ public class DetailSearch extends Activity {
             @Override//아무것도 선택 안되면
             public void onNothingSelected(AdapterView<?> parent) {
                 local.setText("물건 분류 선택");
+                //intent.putExtra("search_local_data","");
             }
         });
 
@@ -135,16 +139,16 @@ public class DetailSearch extends Activity {
         dateBtn1.setOnClickListener(view -> {
             Calendar calender = Calendar.getInstance();
             new DatePickerDialog(this, dateSetListener1, calender.get(Calendar.YEAR), calender.get(Calendar.MONTH), calender.get(Calendar.DATE)).show();
-            String startdate1 = String.format("%d%d%d",calender.get(Calendar.YEAR),calender.get(Calendar.MONTH),calender.get(Calendar.DATE));
-            intent.putExtra("search_date1_data",startdate1);
+            //String startdate1 = String.format("%d%d%d",calender.get(Calendar.YEAR),calender.get(Calendar.MONTH),calender.get(Calendar.DATE));
+            //intent.putExtra("search_date1_data",startdate1);
         });
 
         Button dateBtn2=findViewById(R.id.searchSelectDateBtn2);
         dateBtn2.setOnClickListener(view -> {
             Calendar calender = Calendar.getInstance();
             new DatePickerDialog(this, dateSetListener2, calender.get(Calendar.YEAR), calender.get(Calendar.MONTH), calender.get(Calendar.DATE)).show();
-            String startdate2 = String.format("%d%d%d",calender.get(Calendar.YEAR),calender.get(Calendar.MONTH),calender.get(Calendar.DATE));
-            intent.putExtra("search_date2_data",startdate2);
+            //String startdate2 = String.format("%d%d%d",calender.get(Calendar.YEAR),calender.get(Calendar.MONTH),calender.get(Calendar.DATE));
+            //intent.putExtra("search_date2_data",startdate2);
         });
 
         mArrayList = new ArrayList<>();
@@ -167,11 +171,11 @@ public class DetailSearch extends Activity {
 
         //Intent intent=new Intent(this,LostActivity.class);
         //intent.putExtra("search_category_data",search_category_data);
-        intent.putExtra("search_color_data",search_color_data);
+        //intent.putExtra("search_color_data",search_color_data);
         //intent.putExtra("search_local_data",search_local_data);
         intent.putExtra("search_place_data",search_place_data);
         //intent.putExtra("search_date1_data",search_date1_data);
-        intent.putExtra("search_date2_data",search_date2_data);
+        //intent.putExtra("search_date2_data",search_date2_data);
 
 
         //setResult(RESULT_OK, intent);

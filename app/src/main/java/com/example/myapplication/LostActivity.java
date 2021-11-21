@@ -23,7 +23,10 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class LostActivity extends Activity {
 
@@ -44,7 +47,7 @@ public class LostActivity extends Activity {
     private ProgressDialog progressDialog;
 
     // 1페이지에 10개씩 데이터 불러오기
-    int page=1,limit=30;
+    int page=1,limit=70;
 
     //----------검색
     ArrayList<Police2_Item> filteredList=new ArrayList<>();
@@ -102,6 +105,9 @@ public class LostActivity extends Activity {
         button_search.setOnClickListener(new View.OnClickListener() { //경찰청 버튼 클릭 시 화면 전환
             @Override
             public void onClick(View v) {
+                //arraylist.clear();
+                //adapter.notifyDataSetChanged();
+
                 Intent intent_search = new Intent(getApplicationContext(), DetailSearch.class);
                 //startActivity(intent_search);
                 startActivityForResult(intent_search,3000);
@@ -109,16 +115,6 @@ public class LostActivity extends Activity {
         });
 
 
-        /*
-        button_search.setOnClickListener(new View.OnClickListener() { //경찰청 버튼 클릭 시 화면 전환
-            @Override
-            public void onClick(View v) {
-                Intent intent_search = new Intent(getApplicationContext(), DetailSearch.class);
-                startActivity(intent_search);
-            }
-        });
-
-         */
 
         //AsyncTask
         MyAsyncTask myAsyncTask = new MyAsyncTask();
@@ -140,82 +136,7 @@ public class LostActivity extends Activity {
                 }
             }
         });
-
-        /*
-        if(search.getText().toString()!=null) {
-            //--------------------검색
-            arraylist.addAll(list);
-            list.clear();
-            for (int i = 0; i < arraylist.size(); i++) {
-                // arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
-                if (arraylist.get(i).getlstPrdtNm().toLowerCase().contains(search.getText().toString())) {
-                    // 검색된 데이터를 리스트에 추가한다.
-                    list.add(arraylist.get(i));
-                }
-            }
-
-            adapter.notifyDataSetChanged();
-        }
-
-         */
-
-
-
-
     }
-
-
-    /*
-
-    public void mOnClick(final View view){//검색 버튼 클릭 시
-        //edit 검색 후 키보드 숨기기
-        InputMethodManager mInputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        mInputMethodManager.hideSoftInputFromWindow(edit.getWindowToken(),0);
-
-        getedit = edit.getText().toString();
-        if(getedit.getBytes().length <= 0)
-        {
-            Toast.makeText(getApplicationContext(),"검색어를 입력해주세요.", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            //검색 결과가 다 뜰때까지 로딩중을 띄워줌 -> 공공데이터 파싱을 이용하기 때문에 오래 걸리기 때문이다.
-            progressDialog.setMessage("로딩중입니다.");
-            progressDialog.show();
-
-            if (view.getId() == R.id.button_search) {//버튼을 클릭 시 Thread 발생, 공공데이터를 search하여 불러오는 메서드 실행
-
-
-                new Thread(new Runnable() {
-                    //데이터가 많을 때 별도로 스레드를 만들어 사용하면 빠르게 실행된다.
-
-                    //안드로이드는 싱글 쓰레드 체제이며, 오직 메인 쓰레드(UI 쓰레드)만이 뷰의 값을 바꿀 수 있는 권한을 갖고 있다.
-                    //그래서 뷰의 값에 간섭하는 작업을 하는 쓰레드만을 만들고 뷰에 접근하려 시도하면, 안드로이드 자체적으로 앱을 죽여버린다.
-                    // 이 경우를 막기 위해 안드로이드 개발자들은 핸들러라는 것을 만들어서 쓰는 것이다.
-
-                    @Override
-                    public void run() {
-                        // TODO Auto-generated method stub
-                        //아래 메소드를 호출하여 XML data를 파싱해서 String 객체로 얻어오기
-                        runOnUiThread(new Runnable() { //스레드 사용 시 Ui를 이용하기 때문에 runOnUiThread가 필요하다.
-                            //지금 작업을 수행하는 쓰레드가 메인 쓰레드라면 즉시 작업을 시작하고
-                            //메인 쓰레드가 아니라면 쓰레드 이벤트 큐에 쌓아두는 기능을 하는 게 runOnUiThread다.
-
-                            //Runnable : 특정 동작을 UI 스레드에서 동작하도록 합니다. 만약 현재 스레드가 UI 스레드이면 그 동작은 즉시 수행됩니다.
-                            //Thread에서 UI에 접근하여 변경할 때 필요한것이다.
-                            @Override
-                            public void run() {
-                                // TODO Auto-generated method stub
-                                MyAsyncTask myAsyncTask = new MyAsyncTask();
-                                myAsyncTask.execute();
-                            }
-                        });
-                    }
-                }).start();
-            }
-
-        }
-    }
-*/
 
 
     // DetailSearch 에서 처리된 결과를 받는 메소드
@@ -224,6 +145,14 @@ public class LostActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if(resultCode == RESULT_OK){
+
+            //------------인텐트 후, 화면 갱신-------------
+            //arraylist.clear();
+            //adapter.notifyDataSetChanged();
+
+            //-------------------------------------------
+            //page++;
+
             switch (requestCode){
                 // MainActivity 에서 요청할 때 보낸 요청 코드 (3000)
                 case 3000:
@@ -240,6 +169,57 @@ public class LostActivity extends Activity {
                     Log.i("test", "data:" + search_place_data);
                     Log.i("test", "data:" + search_date1_data);
                     Log.i("test", "data:" + search_date2_data);
+
+
+                    SimpleDateFormat date=new SimpleDateFormat("yyyy-mm-dd");
+                    Date date1=null;
+                    Date date2=null;
+                    Date date_compare=null;
+
+                    //----------날짜(String->date) 변환--------------
+                    try{
+                        date1=date.parse(search_date1_data);
+                        date2=date.parse(search_date2_data);
+                    }catch(ParseException e){
+                        e.printStackTrace();
+                    }
+                    Log.i("test", "date1:" + date1);
+                    Log.i("test", "date2:" + date2);
+                    //-----------------------------------------------
+
+
+                    if (search_local_data.equals("")){
+                        arraylist.clear();
+                        arraylist.addAll(list);
+                    }else{
+                        arraylist.clear();
+                        for (int i = 0; i < list.size(); i++) {
+                            // arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
+                            try{
+                                date_compare=date.parse(list.get(i).getlstYmd());
+                            }catch(ParseException e){
+                                e.printStackTrace();
+                            }
+                            int result_date1=date_compare.compareTo(date1);
+                            int result_date2=date_compare.compareTo(date2);
+
+                            Log.i("test", "date:" + result_date1);
+                            Log.i("test", "date:" + result_date2);
+
+                            /*if (list.get(i).getlstLctNm().toLowerCase().contains(search_local_data)) { //지역 선택 시
+                                // 검색된 데이터를 리스트에 추가한다.
+                                arraylist.add(list.get(i));
+                                Log.i("test", "OK");
+                            } */
+                            if (list.get(i).getlstLctNm().toLowerCase().contains(search_local_data)
+                                    && result_date1>=0&&result_date2<=0) { //지역 / 날짜 선택 시
+                                // 검색된 데이터를 리스트에 추가한다.
+                                arraylist.add(list.get(i));
+                                Log.i("test", "OK");
+                            }
+                        }
+                    }
+                    adapter.notifyDataSetChanged();//어댑터에 연결된 항목들을 갱신함
 
                     break;
             }
@@ -409,34 +389,7 @@ public class LostActivity extends Activity {
                 e.printStackTrace();
             }
 
-            /*
-            arraylist.addAll(list);
 
-            search.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                    //String searchText = search.getText().toString();
-                    //searchFilter(searchText);
-
-                    // input창에 문자를 입력할때마다 호출된다.
-                    // search 메소드를 호출한다.
-                    String text = search.getText().toString();
-                    search(text);
-
-                }
-            });
-            */
 
             return null;
         }
@@ -459,13 +412,44 @@ public class LostActivity extends Activity {
 
             //---------------------검색------------------
             String test = "";
-            //search_category_data = intent.getStringExtra("search_category_data");    //물품 분류명 prdtClNm
-            //search_color_data = intent.getStringExtra("search_color_data");
-            //search_local_data = intent.getStringExtra("search_local_data");  //분실 지역명 lstLctNm
-           //search_place_data = intent.getStringExtra("search_place_data");  //분실 지역명(장소) lstPlace
-            //search_date1_data = intent.getStringExtra("search_date1_data");  //분실물 등록 날짜 START_YMD
-            //search_date2_data = intent.getStringExtra("search_date2_data");  //분실물 등록 날짜 END_YMD
+
             Log.i("test", "data:" + search_local_data);
+
+            //else if(list.get(i).getlstYmd()>)
+            SimpleDateFormat date=new SimpleDateFormat("yyyy-mm-dd");
+            Date date1=null;
+            Date date2=null;
+            Date date_compare=null;
+
+            //----------날짜(String->date) 변환--------------
+            try{
+                date1=date.parse(search_date1_data);
+                date2=date.parse(search_date2_data);
+            }catch(ParseException e){
+                e.printStackTrace();
+            }
+            Log.i("test", "date1:" + date1);
+            Log.i("test", "date2:" + date2);
+            //-----------------------------------------------
+
+            /*
+            if(search_category_data !="" || search_color_data !=""||
+                    search_local_data !="" ||  search_place_data !="" ||
+                    search_date1_data !="" ||   search_date2_data !="" ) {
+                //------------인텐트 후, 화면 갱신-------------
+                arraylist.clear();
+                adapter.notifyDataSetChanged();
+
+                //Intent intent_reset = getIntent();
+                //finish();
+                //startActivity(intent_reset);
+
+                //-------------------------------------------
+            }
+
+             */
+
+
 
 
             //---------test1-----------
@@ -478,54 +462,39 @@ public class LostActivity extends Activity {
                 arraylist.clear();
                 for (int i = 0; i < list.size(); i++) {
                     // arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
-                    if (list.get(i).getlstLctNm().toLowerCase().contains(search_local_data)) {
+                    try{
+                        date_compare=date.parse(list.get(i).getlstYmd());
+                    }catch(ParseException e){
+                        e.printStackTrace();
+                    }
+
+                    //게시글의 날짜 - 상세검색 지정 날짜
+                    //result_date1 >=0 , result_date2<=0
+                    int result_date1=date_compare.compareTo(date1);
+                    int result_date2=date_compare.compareTo(date2);
+
+                    Log.i("test", "date:" + result_date1);
+                    Log.i("test", "date:" + result_date2);
+
+                    /*
+                    if (list.get(i).getlstLctNm().toLowerCase().contains(search_local_data)) { //지역 선택 시
                         // 검색된 데이터를 리스트에 추가한다.
                         arraylist.add(list.get(i));
                         Log.i("test", "OK");
                     }
+
+                     */
+                    if (list.get(i).getlstLctNm().toLowerCase().contains(search_local_data)
+                            && result_date1>=0&&result_date2<=0) { //지역 / 날짜 선택 시
+                        // 검색된 데이터를 리스트에 추가한다.
+                        arraylist.add(list.get(i));
+                        Log.i("test", "OK");
+                    }
+
                 }
+
             }
-
-
-            //--------------------------------------------
-
-
-
-
             adapter.notifyDataSetChanged();//어댑터에 연결된 항목들을 갱신함.
-
-
-
-            /*
-            //-------검색
-            arraylist.addAll(list);
-
-            search.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                    //String searchText = search.getText().toString();
-                    //searchFilter(searchText);
-
-                    // input창에 문자를 입력할때마다 호출된다.
-                    // search 메소드를 호출한다.
-                    String text = search.getText().toString();
-                    search_method(text);
-
-                }
-            });
-
-             */
 
         }
     }
