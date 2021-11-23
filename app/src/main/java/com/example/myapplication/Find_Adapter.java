@@ -80,7 +80,7 @@ public class Find_Adapter extends RecyclerView.Adapter<Find_Adapter.MyViewHolder
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            atcId = itemView.findViewById(R.id.tv_atcId);
+            atcId = itemView.findViewById(R.id.tv_prdtClNm);
             depPlace = itemView.findViewById(R.id.tv_depPlace);
             fdPrdtNm = itemView.findViewById(R.id.tv_fdPrdtNm);
             fdYmd = itemView.findViewById(R.id.tv_fdYmd);

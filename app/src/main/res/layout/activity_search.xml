@@ -103,7 +103,7 @@
                         android:text="지역 선택"
                         android:textAlignment="center"
                         android:textSize="18dp"
-                        />
+                        android:gravity="center_horizontal" />
                 </LinearLayout>
                 <View
                     android:layout_width="match_parent"

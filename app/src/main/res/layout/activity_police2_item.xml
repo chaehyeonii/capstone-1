@@ -21,24 +21,15 @@
         android:layout_marginTop="7dp"
         android:orientation="vertical">
 
-        <LinearLayout
+
+        <TextView
+            android:id="@+id/tv_lstPrdtNm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="관리ID: "
-                android:textSize="13sp" />
 
-            <TextView
-                android:id="@+id/tv_atcId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="13sp" />
-
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,26 +39,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="분실물: "
-                android:textSize="13sp" />
-
-            <TextView
-                android:id="@+id/tv_lstPrdtNm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="13sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="분실지역명: "
+                android:text="지역: "
                 android:textSize="13sp" />
 
             <TextView
@@ -87,7 +59,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="분실장소: "
+                android:text="장소: "
                 android:textSize="13sp" />
 
             <TextView
@@ -97,7 +69,6 @@
                 android:textSize="13sp" />
 
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -106,14 +77,31 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="분실일자: "
+                android:text="날짜: "
                 android:textSize="13sp" />
-
             <TextView
                 android:id="@+id/tv_lstYmd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13sp" />
+            </LinearLayout>
+            <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="분류: "
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_prdtClNm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13sp" />
+
         </LinearLayout>
 
 

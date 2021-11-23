@@ -38,7 +38,7 @@ public class LostActivity extends Activity {
     RecyclerView recyclerView;
 
     EditText search;
-
+    //TextView search;
     //-------무한 스크롤------------
     NestedScrollView nestedScrollView;
     ProgressBar progressBar;
@@ -408,6 +408,7 @@ public class LostActivity extends Activity {
             //어답터 연결
             //Police2_Adapter adapter = new Police2_Adapter(getApplicationContext(), list);
             recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
             adapter.notifyDataSetChanged();
 
             //---------------------검색------------------

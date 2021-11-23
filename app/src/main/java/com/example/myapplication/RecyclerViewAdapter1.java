@@ -93,7 +93,7 @@ public class RecyclerViewAdapter1 extends RecyclerView.Adapter<RecyclerView.View
             super(itemView);
             textView = itemView.findViewById(R.id.textView);
 
-            atcId = itemView.findViewById(R.id.tv_atcId);
+            atcId = itemView.findViewById(R.id.tv_prdtClNm);
             lstPlace = itemView.findViewById(R.id.tv_lstPlace);
             lstPrdtNm = itemView.findViewById(R.id.tv_lstPrdtNm);
             lstYmd = itemView.findViewById(R.id.tv_lstYmd);

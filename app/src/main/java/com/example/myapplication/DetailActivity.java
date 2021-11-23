@@ -6,6 +6,7 @@ package com.example.myapplication;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,13 +20,15 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Arrays;
 
 
 public class DetailActivity extends Activity {
 
     //EditText edit;
     TextView textView1;
-    TextView textView2;
+    TextView Text_lstSbjt, Text_lstPrdtNm,Text_prdtClNm,Text_lstLctNm,Text_lstPlace,
+            Text_lstYmd, Text_uniq, Text_orgNm,Text_tel;
     TextView textView3;
 
 
@@ -36,13 +39,22 @@ public class DetailActivity extends Activity {
     String id;
     String imageget;
     String imageurl;
+    String detail_data[];
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        textView2 = (TextView) findViewById(R.id.textView2);
+        Text_lstSbjt = (TextView) findViewById(R.id.Text_lstSbjt);
+        Text_lstPrdtNm = (TextView) findViewById(R.id.Text_lstPrdtNm);
+        Text_prdtClNm = (TextView) findViewById(R.id.Text_prdtClNm);
+        Text_lstLctNm = (TextView) findViewById(R.id.Text_lstLctNm);
+        Text_lstPlace = (TextView) findViewById(R.id.Text_lstPlace);
+        Text_lstYmd = (TextView) findViewById(R.id.Text_lstYmd);
+        Text_uniq = (TextView) findViewById(R.id.Text_uniq);
+        Text_orgNm = (TextView) findViewById(R.id.Text_orgNm);
+        Text_tel = (TextView) findViewById(R.id.Text_tel);
 
         Intent intent = getIntent(); //1
 
@@ -56,6 +68,12 @@ public class DetailActivity extends Activity {
             public void run() {
                 // TODO Auto-generated method stub
                 data = getXmlData();//아래 메소드를 호출하여 XML data를 파싱해서 String 객체로 얻어오기\
+
+
+                    detail_data = data.split("\n");
+                    Log.d("test", Arrays.toString(detail_data) );
+
+
                 imageget = getXmlURL();
 
                 runOnUiThread(new Runnable() {
@@ -63,7 +81,15 @@ public class DetailActivity extends Activity {
                     @Override
                     public void run() {
                         // TODO Auto-generated method stub
-                        textView2.setText(data); //TextView에 문자열  data 출력
+                        Text_lstSbjt.setText(detail_data[3]); //TextView에 문자열  data 출력
+                        Text_lstPrdtNm .setText(detail_data[2]); //물품명
+                        Text_prdtClNm.setText(detail_data[6]); //물
+                        Text_lstLctNm.setText(detail_data[0]); //분실지역명
+                        Text_lstPlace.setText(detail_data[1]); //분실장소
+                        Text_lstYmd.setText(detail_data[4]);
+                        Text_uniq.setText(detail_data[8]);
+                        Text_orgNm.setText(detail_data[5]);
+                        Text_tel.setText(detail_data[7]);
                         Glide.with(getApplicationContext()).load(imageget).error(R.drawable.flower).into(imageView);
                     }
                 });
@@ -102,78 +128,52 @@ public class DetailActivity extends Activity {
                         tag = xpp.getName();//태그 이름 얻어오기
 
                         if (tag.equals("item")) ;// 첫번째 검색결과
-                        else if (tag.equals("atcId")) {
-                            buffer.append("관리ID : ");
+                        else if (tag.equals("lstSbjt")) {
+                            //buffer.append("게시제목 :");
                             xpp.next();
-                            buffer.append(xpp.getText());//lstPlace 요소의 TEXT 읽어와서 문자열버퍼에 추가
-                            buffer.append("\n"); //줄바꿈 문자 추가
-                        } /* else if (tag.equals("lstFilePathImg")) {
                             buffer.append(xpp.getText());
                             buffer.append("\n");
-                            //image=xpp.getText();
-
-                        } */else if (tag.equals("lstHor")) {
-                            buffer.append("분실시간 :");
-                            xpp.next();
-                            buffer.append(xpp.getText());//cpId
-                            buffer.append("\n");
                         } else if (tag.equals("lstLctNm")) {
-                            buffer.append("분실지역명 :");
+                            buffer.append("지역: ");
                             xpp.next();
                             buffer.append(xpp.getText());//cpNm
                             buffer.append("\n");
                         } else if (tag.equals("lstPlace")) {
-                            buffer.append("분실장소 :");
+                            buffer.append("장소: ");
+                            xpp.next();
+                            buffer.append(xpp.getText());
+                        } else if (tag.equals("lstPlaceSeNm")) {
+                            buffer.append(" / ");
                             xpp.next();
                             buffer.append(xpp.getText());//
                             buffer.append("\n");
-                        } else if (tag.equals("lstPlaceSeNm")) {
-                            buffer.append("분실장소구분명 :");
-                            xpp.next();
-                            buffer.append(xpp.getText());//
-                            buffer.append("  ,  ");
                         } else if (tag.equals("lstPrdtNm")) {
-                            buffer.append("물품명 :");
+                            buffer.append("물품: ");
                             xpp.next();
                             buffer.append(xpp.getText());//csId
                             buffer.append("\n");
-                        } else if (tag.equals("lstSbjt")) {
-                            buffer.append("게시제목 :");
-                            xpp.next();
-                            buffer.append(xpp.getText());
-                            buffer.append("\n");
-                        } else if (tag.equals("lstSteNm")) {
-                            buffer.append("분실물 상태명 :");
-                            xpp.next();
-                            buffer.append(xpp.getText());//
-                            buffer.append("\n");
                         } else if (tag.equals("lstYmd")) {
-                            buffer.append("분실일자 :");
-                            xpp.next();
-                            buffer.append(xpp.getText());//
-                            buffer.append("\n");
-                        } else if (tag.equals("orgId")) {
-                            buffer.append("기관 ID :");
+                            buffer.append("일자: ");
                             xpp.next();
                             buffer.append(xpp.getText());//
                             buffer.append("\n");
                         } else if (tag.equals("orgNm")) {
-                            buffer.append("기관명 :");
+                            buffer.append("기관: ");
                             xpp.next();
                             buffer.append(xpp.getText());//
                             buffer.append("\n");
                         } else if (tag.equals("prdtClNm")) {
-                            buffer.append("물품분류명 :");
+                            buffer.append("분류: ");
                             xpp.next();
                             buffer.append(xpp.getText());//
                             buffer.append("\n");
                         } else if (tag.equals("tel")) {
-                            buffer.append("기관 전화번호 :");
+                            buffer.append("기관 전화번호: ");
                             xpp.next();
                             buffer.append(xpp.getText());//
                             buffer.append("\n");
                         } else if (tag.equals("uniq")) {
-                            buffer.append("특이사항 :");
+                            buffer.append("특이사항: ");
                             xpp.next();
                             buffer.append(xpp.getText());//
                             buffer.append("\n");

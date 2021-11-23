@@ -44,7 +44,7 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         //binding
-        holder.atcId.setText(mList.get(position).atcId);
+        //holder.atcId.setText(mList.get(position).atcId);
         holder.lstPlace.setText(mList.get(position).lstPlace);
         holder.lstPrdtNm.setText(mList.get(position).lstPrdtNm);
         holder.lstYmd.setText(mList.get(position).lstYmd);
@@ -96,7 +96,7 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
 
     //ViewHolder
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView atcId;
+        //public TextView atcId;
         public TextView lstPlace;
         public TextView lstPrdtNm;
         public TextView lstYmd;
@@ -106,7 +106,7 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            atcId = itemView.findViewById(R.id.tv_atcId);
+            //atcId = itemView.findViewById(R.id.tv_atcId);
             lstPlace = itemView.findViewById(R.id.tv_lstPlace);
             lstPrdtNm = itemView.findViewById(R.id.tv_lstPrdtNm);
             lstYmd = itemView.findViewById(R.id.tv_lstYmd);

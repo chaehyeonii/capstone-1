@@ -40,7 +40,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             super(itemView);
 
-            atcId = itemView.findViewById(R.id.tv_atcId);
+            atcId = itemView.findViewById(R.id.tv_prdtClNm);
             lstPlace = itemView.findViewById(R.id.tv_lstPlace);
             lstPrdtNm = itemView.findViewById(R.id.tv_lstPrdtNm);
             lstSbjt = itemView.findViewById(R.id.tv_lstSbjt);

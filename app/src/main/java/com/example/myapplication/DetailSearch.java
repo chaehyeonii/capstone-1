@@ -25,6 +25,7 @@ public class DetailSearch extends Activity {
     //----------주소 찾아오기----------------------
     // 초기변수설정
     TextView searchGetLocalData;
+    //EditText searchGetLocalData;
     // 주소 요청코드 상수 requestCode
     private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
     String[] address;
@@ -170,8 +171,18 @@ public class DetailSearch extends Activity {
                 }else {
                     Toast.makeText(getApplicationContext(), "인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
+        /*
+        searchGetLocalData = findViewById(R.id.searchGetLocalData);
+        address = searchGetLocalData.getText().toString().split(" ");
+        region1=address[0];
+
+
+        intent_lost.putExtra("search_local_data",region1);
+
+         */
 
         /*
         address = searchGetLocalData.toString().split(" ");
@@ -202,6 +213,13 @@ public class DetailSearch extends Activity {
         });
 
         mArrayList = new ArrayList<>();
+        /*
+        get_local();
+        intent_lost.putExtra("search_local_data",local_data);
+
+         */
+
+
 
         //Intent intent=new Intent(this,LostActivity.class);
         //검색 버튼 클릭 이벤트
@@ -213,6 +231,14 @@ public class DetailSearch extends Activity {
                 //Intent intent_searchLostBtn = new Intent(getApplicationContext(), LostActivity.class);
                 //startActivity(intent_searchLostBtn);
                 //searchGetData();
+
+                searchGetLocalData = findViewById(R.id.searchGetLocalData);
+                address = searchGetLocalData.getText().toString().split(" ");
+                region1=address[0];
+
+
+                intent_lost.putExtra("search_local_data",region1);
+
                 setResult(RESULT_OK,intent_lost);
                 finish();
             }
@@ -256,6 +282,9 @@ public class DetailSearch extends Activity {
         }
     }
 
+    public void get_local(){
+        local_data = region1;
+    }
 
      /*
     public void searchGetData(){

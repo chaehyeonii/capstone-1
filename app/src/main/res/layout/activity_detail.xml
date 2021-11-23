@@ -9,20 +9,107 @@
     android:padding="10dp">
 
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="366dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textSize="13sp"
-            android:textStyle="bold" />
-
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="382dp"
             app:srcCompat="@drawable/flower" />
+
+        <TextView
+            android:id="@+id/Text_lstSbjt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="left"
+            android:textSize="25dp"
+            android:textColor="#000000"
+            android:textStyle="bold"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_margin="10dp"
+            android:background="#DADADA" />
+
+        <TextView
+            android:id="@+id/Text_lstPrdtNm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="left"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/Text_prdtClNm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="left"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/Text_lstLctNm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="left"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/Text_lstPlace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="left"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/Text_lstYmd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="left"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/Text_uniq"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="left"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/Text_orgNm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="left"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/Text_tel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="left"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
 
 </LinearLayout>
