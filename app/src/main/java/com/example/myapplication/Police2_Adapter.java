@@ -49,7 +49,8 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
         holder.lstPrdtNm.setText(mList.get(position).lstPrdtNm);
         holder.lstYmd.setText(mList.get(position).lstYmd);
         holder.lstLctNm.setText(mList.get(position).lstLctNm);
-
+        holder.prdtClNm.setText(mList.get(position).prdtClNm);
+        //holder.lstPlaceSeNm.setText(mList.get(position).lstPlaceSeNm);
 
         Glide.with(holder.itemView.getContext())
                 .load(mList.get(position).getlstFilePathImg())
@@ -73,26 +74,7 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
     }
     //----------------------------------------
 
-    //다른 검색 기능
 
-    public View getView(int position, View convertView, ViewGroup viewGroup) {
-        if(convertView == null){
-            convertView = mInflate.inflate(R.layout.activity_police2_item,null);
-
-            viewHolder = new MyViewHolder(convertView);
-            viewHolder.lstPrdtNm = (TextView) convertView.findViewById(R.id.tv_lstPrdtNm);
-
-            convertView.setTag(viewHolder);
-        }else{
-            viewHolder = (MyViewHolder)convertView.getTag();
-        }
-
-        // 리스트에 있는 데이터를 리스트뷰 셀에 뿌린다.
-        viewHolder.lstPrdtNm.setText(mList.get(position).lstPrdtNm);
-
-        return convertView;
-    }
-    //---------------------------------------
 
     //ViewHolder
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -102,7 +84,8 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
         public TextView lstYmd;
         public TextView lstLctNm;
         public ImageView imageView2;
-
+        public TextView prdtClNm;
+        //public TextView lstPlaceSeNm; //지역 분류
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -112,6 +95,8 @@ public class Police2_Adapter extends RecyclerView.Adapter<Police2_Adapter.MyView
             lstYmd = itemView.findViewById(R.id.tv_lstYmd);
             lstLctNm = itemView.findViewById(R.id.tv_lstLctNm);
             imageView2=itemView.findViewById(R.id.imageView2);
+            prdtClNm=itemView.findViewById(R.id.tv_prdtClNm);
+            //lstPlaceSeNm=itemView.findViewById(R.id.tv_lstPlaceSeNm);
 
 
             //click

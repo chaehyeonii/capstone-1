@@ -60,21 +60,13 @@ public class LostActivity extends Activity {
 
     //검색
     String search_category_data = "";   //물품 분류명 prdtClNm
-    String search_color_data = "";
+    String search_things_data = "";
     String search_local_data = "";  //분실 지역명 lstLctNm
     String search_place_data = "";  //분실 지역명(장소) lstPlace
     String search_date1_data =""; //분실물 등록 날짜 START_YMD
     String search_date2_data = "";  //분실물 등록 날짜 END_YMD
 
 
-    /*
-    String search_category_data = intent.getStringExtra("search_category_data");    //물품 분류명 prdtClNm
-    String search_color_data = intent.getStringExtra("search_color_data");
-    String search_local_data = intent.getStringExtra("search_local_data");  //분실 지역명 lstLctNm
-    String search_place_data = intent.getStringExtra("search_place_data");  //분실 지역명(장소) lstPlace
-    String search_date1_data = intent.getStringExtra("search_date1_data");  //분실물 등록 날짜 START_YMD
-    String search_date2_data = intent.getStringExtra("search_date2_data");  //분실물 등록 날짜 END_YMD
-        */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,13 +150,13 @@ public class LostActivity extends Activity {
                 case 3000:
                     //mainResultTv.setText(data.getStringExtra("result"));
                     search_category_data = intent.getStringExtra("search_category_data");    //물품 분류명 prdtClNm
-                    search_color_data = intent.getStringExtra("search_color_data");
+                    search_things_data = intent.getStringExtra("search_things_data");
                     search_local_data = intent.getStringExtra("search_local_data");  //분실 지역명 lstLctNm
                     search_place_data = intent.getStringExtra("search_place_data");  //분실 지역명(장소) lstPlace
                     search_date1_data = intent.getStringExtra("search_date1_data");  //분실물 등록 날짜 START_YMD
                     search_date2_data = intent.getStringExtra("search_date2_data");  //분실물 등록 날짜 END_YMD
                     Log.i("test", "category:" + search_category_data);
-                    Log.i("test", "color:" + search_color_data);
+                    Log.i("test", "color:" + search_things_data);
                     Log.i("test", "local:" + search_local_data);
                     Log.i("test", "place:" + search_place_data);
                     Log.i("test", "date1:" + search_date1_data);
@@ -211,22 +203,28 @@ public class LostActivity extends Activity {
                                 arraylist.add(list.get(i));
                                 Log.i("test", "OK");
                             } */
-                            if (list.get(i).getlstLctNm().toLowerCase().contains(search_local_data)
-                                    && result_date1>=0&&result_date2<=0) { //지역 / 날짜 선택 시
-                                // 검색된 데이터를 리스트에 추가한다.
-                                arraylist.add(list.get(i));
-                                Log.i("test", "OK");
+
+
+                                if (list.get(i).getlstLctNm().toLowerCase().contains(search_local_data) //지역 일치
+                                        && result_date1 >= 0 && result_date2 <= 0 // 날짜 일치
+                                        && list.get(i).getprdtClNm().toLowerCase().contains(search_category_data) //분류명 일치
+                                        && list.get(i).getlstPrdtNm().toLowerCase().contains(search_things_data) //물품명 일치
+                                        && list.get(i).getlstPlaceSeNm().toLowerCase().contains(search_place_data) //장소 일치
+                                ) {
+                                    // 검색된 데이터를 리스트에 추가한다.
+                                    arraylist.add(list.get(i));
+                                    Log.i("test", "OK");
+
                             }
                         }
                     }
                     adapter.notifyDataSetChanged();//어댑터에 연결된 항목들을 갱신함
 
+
                     break;
             }
         }
     }
-
-
 
 
     void getXmlData(int page, int limit){
@@ -235,8 +233,6 @@ public class LostActivity extends Activity {
 
         //arraylist.addAll(list);
     }
-
-
 
 
 
@@ -273,6 +269,7 @@ public class LostActivity extends Activity {
                 boolean b_lstPlace =false;
                 boolean b_lstPrdtNm = false;
                 boolean b_lstYmd = false;
+                boolean b_prdtClNm = false;
 
                 //실질적으로 파싱해서 inputstream해주는 코드
                 URL url = new URL(requestUrl); ////공공데이터 파싱 주소를 url에 넣음음
@@ -308,6 +305,7 @@ public class LostActivity extends Activity {
                             if (parser.getName().equals("lstPlace")) b_lstPlace = true;
                             if (parser.getName().equals("lstPrdtNm")) b_lstPrdtNm = true;
                             if (parser.getName().equals("lstYmd")) b_lstYmd = true;
+                            if (parser.getName().equals("prdtClNm")) b_prdtClNm = true;
                             break;
 
                         case XmlPullParser.TEXT:  //eventType이 TEXT일 경우. parser가 내용에 접근했을때
@@ -318,6 +316,7 @@ public class LostActivity extends Activity {
                                 //목록에 이미지 불러오기 위한 코드
                                 StringBuffer image = new StringBuffer();
                                 StringBuffer lstLctNm = new StringBuffer();
+                                StringBuffer lstPlaceSeNm  = new StringBuffer();
                                 String queryUrl = "http://apis.data.go.kr/1320000/LostGoodsInfoInqireService/getLostGoodsDetailInfo?"//요청 URL
                                         + "ATC_ID=" + parser.getText() + "&ServiceKey=" + dataKey;
 
@@ -350,6 +349,9 @@ public class LostActivity extends Activity {
                                                 }else if (tag2.equals("lstLctNm")) {
                                                     xpp2.next();
                                                     lstLctNm.append(xpp2.getText());
+                                                }else if (tag2.equals("lstPlaceSeNm")) {
+                                                    xpp2.next();
+                                                    lstPlaceSeNm.append(xpp2.getText());
                                                 }
                                                 break;
 
@@ -370,6 +372,7 @@ public class LostActivity extends Activity {
                                 }
                                 item.setlstFilePathImg(image.toString());//StringBuffer 문자열 객체 반환
                                 item.setlstLctNm(lstLctNm.toString());//StringBuffer 문자열 객체 반환
+                                item.setlstPlaceSeNm(lstPlaceSeNm.toString());//StringBuffer 문자열 객체 반환
 
                             } else if(b_lstPlace) {
                                 item.setlstPlace(parser.getText());
@@ -380,6 +383,9 @@ public class LostActivity extends Activity {
                             } else if(b_lstYmd) {
                                 item.setlstYmd(parser.getText());
                                 b_lstYmd = false;
+                            }else if(b_prdtClNm) {
+                                item.setprdtClNm(parser.getText());
+                                b_prdtClNm = false;
                             }
                             break;
                     }
@@ -433,22 +439,6 @@ public class LostActivity extends Activity {
             Log.i("test", "date2:" + date2);
             //-----------------------------------------------
 
-            /*
-            if(search_category_data !="" || search_color_data !=""||
-                    search_local_data !="" ||  search_place_data !="" ||
-                    search_date1_data !="" ||   search_date2_data !="" ) {
-                //------------인텐트 후, 화면 갱신-------------
-                arraylist.clear();
-                adapter.notifyDataSetChanged();
-
-                //Intent intent_reset = getIntent();
-                //finish();
-                //startActivity(intent_reset);
-
-                //-------------------------------------------
-            }
-
-             */
 
 
 
@@ -477,16 +467,14 @@ public class LostActivity extends Activity {
                     Log.i("test", "date:" + result_date1);
                     Log.i("test", "date:" + result_date2);
 
-                    /*
-                    if (list.get(i).getlstLctNm().toLowerCase().contains(search_local_data)) { //지역 선택 시
-                        // 검색된 데이터를 리스트에 추가한다.
-                        arraylist.add(list.get(i));
-                        Log.i("test", "OK");
-                    }
 
-                     */
-                    if (list.get(i).getlstLctNm().toLowerCase().contains(search_local_data)
-                            && result_date1>=0&&result_date2<=0) { //지역 / 날짜 선택 시
+
+                    if (list.get(i).getlstLctNm().toLowerCase().contains(search_local_data) //지역 일치
+                            && result_date1 >= 0 && result_date2 <= 0 // 날짜 일치
+                            && list.get(i).getprdtClNm().toLowerCase().contains(search_category_data) //분류명 일치
+                            && list.get(i).getlstPrdtNm().toLowerCase().contains(search_things_data) //물품명 일치
+                            && list.get(i).getlstPlaceSeNm().toLowerCase().contains(search_place_data) //장소 일치
+                    ) {
                         // 검색된 데이터를 리스트에 추가한다.
                         arraylist.add(list.get(i));
                         Log.i("test", "OK");
@@ -498,46 +486,6 @@ public class LostActivity extends Activity {
             adapter.notifyDataSetChanged();//어댑터에 연결된 항목들을 갱신함.
 
         }
-    }
-
-    public void searchFilter(String searchText) {
-        filteredList.clear();
-
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getlstPrdtNm().toLowerCase().contains(searchText.toLowerCase())) {
-                filteredList.add(list.get(i));
-            }
-        }
-
-        adapter.filterList(list);
-    }
-
-    // 검색을 수행하는 메소드
-    public void search_method(String charText) {
-
-        // 문자 입력시마다 리스트를 지우고 새로 뿌려준다.
-        list.clear();
-
-        // 문자 입력이 없을때는 모든 데이터를 보여준다.
-        if (charText.length() == 0) {
-            list.addAll(arraylist);
-        }
-        // 문자 입력을 할때..
-        else
-        {
-            // 리스트의 모든 데이터를 검색한다.
-            for(int i = 0;i < arraylist.size(); i++)
-            {
-                // arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
-                if (arraylist.get(i).getlstPrdtNm().toLowerCase().contains(charText))
-                {
-                    // 검색된 데이터를 리스트에 추가한다.
-                    list.add(arraylist.get(i));
-                }
-            }
-        }
-        // 리스트 데이터가 변경되었으므로 아답터를 갱신하여 검색된 데이터를 화면에 보여준다.
-        adapter.notifyDataSetChanged();
     }
 
 }

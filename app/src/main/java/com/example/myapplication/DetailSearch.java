@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,7 +26,6 @@ public class DetailSearch extends Activity {
     //----------주소 찾아오기----------------------
     // 초기변수설정
     TextView searchGetLocalData;
-    //EditText searchGetLocalData;
     // 주소 요청코드 상수 requestCode
     private static final int SEARCH_ADDRESS_ACTIVITY = 10000;
     String[] address;
@@ -33,17 +33,14 @@ public class DetailSearch extends Activity {
     String local_data;
     //-------------------------------------------------
 
-    String[] colorItems = {"선택", "검정색 ","흰색","빨강색","연두색","파랑색 ","노랑색","핑크색","보라색","회색","갈색"};
-    String[] categoryItems = {"선택", "가방", "의류", "전자제품", "악세서리", "모자", "신발", "시계", "휴대폰"};
-    /*
-    String[] localItems = {"선택", "서울특별시", "강원도", "경기도", "경상남도", "경상북도", "광주광역시", "대구광역시"
-            , "대전광역시", "부산광역시", "울산광역시", "인천광역시", "전라남도", "전라북도", "충청남도", "충청북도"
-            , "제주특별자치도", "세종특별자치시", "기타"};
+    //String[] colorItems = {"선택", "검정색 ","흰색","빨강색","연두색","파랑색 ","노랑색","핑크색","보라색","회색","갈색"};
+    String[] categoryItems = {"전체", "가방", "귀금속", "도서용품", "서류", "산업용품", "쇼핑백", "스포츠용품", "악기",
+                            "유가증권","의류","자동차","전자기기","지갑","증명서","컴퓨터","카드","현금","휴대폰","기타물품"};
 
-     */
-
-    //int code;
-
+    String[] placeItems={"전체","우체국(통)","노상","기차","지하철","백화점/매장","택시","음식점(업소포함)","공공기관","버스"
+                            ,"주택","공항","상점","영화관","놀이공원","유원지","학교","회사","불상","직접입력"};
+    EditText searchGetPlaceData, searchGetThingsData; //지역, 물품 검색
+    String search_place_data, search_things_data;
     ArrayList<HashMap<String, String>> mArrayList;
     ListView mlistView;
 
@@ -82,25 +79,6 @@ public class DetailSearch extends Activity {
                     }
                 };
 
-        //colorSpinner 처리 (색상선택처리)
-        Spinner colorSpin = (Spinner)findViewById(R.id.searchGetColorSpinner);
-
-        ArrayAdapter<String> colorAdapter=new ArrayAdapter<String>(
-                this,android.R.layout.simple_spinner_item,colorItems
-        );
-        colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        colorSpin.setAdapter(colorAdapter);
-        colorSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override//선택되면
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-
-                intent_lost.putExtra("search_color_data",colorItems[position]);
-            }
-            @Override//아무것도 선택 안되면
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         //categorySpinner 처리 (색상선택처리)
         Spinner categorySpin = (Spinner)findViewById(R.id.searchGetCategorySpinner);
@@ -119,32 +97,23 @@ public class DetailSearch extends Activity {
             }
         });
 
-
-
-        /*
-        //localSpinner 처리 (물건분류선택처리)
-        Spinner localSpin = (Spinner)findViewById(R.id.searchGetLocalSpinner);
-        local=findViewById(R.id.searchGetLocalData);
-        ArrayAdapter<String> localAdapter=new ArrayAdapter<String>(
-                this,android.R.layout.simple_spinner_item,localItems
+        //searchGetPlaceSpinner 처리 (색상선택처리)
+        Spinner placeSpin = (Spinner)findViewById(R.id.searchGetPlaceSpinner);
+        ArrayAdapter<String> placeAdapter=new ArrayAdapter<String>(
+                this,android.R.layout.simple_spinner_item,placeItems
         );
-        localAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        localSpin.setAdapter(localAdapter);
-        localSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        placeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        placeSpin.setAdapter(placeAdapter);
+        placeSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override//선택되면
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                local.setText(localItems[position]);
-                intent.putExtra("search_local_data",localItems[position]);
+                intent_lost.putExtra("search_place_data",placeItems[position]);
             }
             @Override//아무것도 선택 안되면
             public void onNothingSelected(AdapterView<?> parent) {
-                local.setText("물건 분류 선택");
-                //intent.putExtra("search_local_data","");
             }
         });
 
-
-         */
 
         //지역 선택 구현
         //----------주소 검색-----------------
@@ -174,25 +143,7 @@ public class DetailSearch extends Activity {
 
             }
         });
-        /*
-        searchGetLocalData = findViewById(R.id.searchGetLocalData);
-        address = searchGetLocalData.getText().toString().split(" ");
-        region1=address[0];
 
-
-        intent_lost.putExtra("search_local_data",region1);
-
-         */
-
-        /*
-        address = searchGetLocalData.toString().split(" ");
-        Log.i("test", "data:" + searchGetLocalData.toString());
-        region1 = address[0];
-        region2 = address[1];
-
-        intent_lost.putExtra("search_local_data",region1);
-
-         */
 
 
         //날짜 선택 구현
@@ -213,11 +164,6 @@ public class DetailSearch extends Activity {
         });
 
         mArrayList = new ArrayList<>();
-        /*
-        get_local();
-        intent_lost.putExtra("search_local_data",local_data);
-
-         */
 
 
 
@@ -235,9 +181,18 @@ public class DetailSearch extends Activity {
                 searchGetLocalData = findViewById(R.id.searchGetLocalData);
                 address = searchGetLocalData.getText().toString().split(" ");
                 region1=address[0];
-
-
                 intent_lost.putExtra("search_local_data",region1);
+
+                /*
+                searchGetPlaceData = findViewById(R.id.searchGetPlaceData);
+                search_place_data = searchGetPlaceData.getText().toString();
+                intent_lost.putExtra("search_place_data",search_place_data);
+                
+                 */
+
+                searchGetThingsData = findViewById(R.id.searchGetThingsData);
+                search_things_data = searchGetThingsData.getText().toString();
+                intent_lost.putExtra("search_things_data",search_things_data);
 
                 setResult(RESULT_OK,intent_lost);
                 finish();
@@ -282,98 +237,5 @@ public class DetailSearch extends Activity {
         }
     }
 
-    public void get_local(){
-        local_data = region1;
-    }
 
-     /*
-    public void searchGetData(){
-        //검색 조건 데이터 받기
-        TextView search_category, search_color, search_local, search_date1, search_date2;
-        EditText search_place;
-        search_category = findViewById(R.id.searchGetCategoryData);
-        search_color = findViewById(R.id.searchGetColorData);
-        search_local = findViewById(R.id.searchGetLocalData);
-        search_place = findViewById(R.id.searchGetPlaceData);
-        search_date1 = findViewById(R.id.searchGetDateData1);
-        search_date2 = findViewById(R.id.searchGetDateData2);
-
-        String search_category_data = search_category.getText().toString();
-        String search_color_data = search_color.getText().toString();
-        String search_local_data = search_local.getText().toString();
-        String search_place_data = search_place.getText().toString();
-        String search_date1_data = search_date1.getText().toString();
-        String search_date2_data = search_date2.getText().toString();
-
-        Intent intent=new Intent(this,LostActivity.class);
-        intent.putExtra("search_category_data",search_category_data);
-        intent.putExtra("search_color_data",search_color_data);
-        intent.putExtra("search_local_data",search_local_data);
-        intent.putExtra("search_place_data",search_place_data);
-        intent.putExtra("search_date1_data",search_date1_data);
-        intent.putExtra("search_date2_data",search_date2_data);
-        //startActivity(intent);
-        //setResult(RESULT_OK,intent);
-        //finish();
-
-      */
-
-        /*
-
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject JsonObject = new JSONObject(response);
-                    boolean success=JsonObject.getBoolean("success");
-                    JSONArray jsonArray = JsonObject.getJSONArray("getpostdata");
-
-                    for(int i=0;i<jsonArray.length();i++){
-                        JSONObject item = jsonArray.getJSONObject(i);
-
-                        String GetPostTitleData = item.getString(TAG_GetPostTitle );
-                        String GetPostCategoryData = item.getString(TAG_GetPostCategory );
-                        String GetPostLocalData = item.getString(TAG_GetPostLocal );
-                        String GetPostPlaceData = item.getString(TAG_GetPostPlace );
-                        String GetPostDateData = item.getString(TAG_GetPostDate );
-                        String GetPostColorData = item.getString(TAG_GetPostColor );
-                        String GetPostMoreInfoData = item.getString(TAG_GetPostMoreInfo );
-                        String GetPostImgData = item.getString(TAG_GetPostImg );
-
-                        HashMap<String,String> hashMap = new HashMap<>();
-
-                        hashMap.put(TAG_GetPostTitle, GetPostTitleData);
-                        hashMap.put(TAG_GetPostCategory, GetPostCategoryData);
-                        hashMap.put(TAG_GetPostLocal, GetPostLocalData);
-                        hashMap.put(TAG_GetPostPlace, GetPostPlaceData);
-                        hashMap.put(TAG_GetPostDate, GetPostDateData);
-                        hashMap.put(TAG_GetPostColor, GetPostColorData);
-                        hashMap.put(TAG_GetPostMoreInfo, GetPostMoreInfoData);
-                        hashMap.put(TAG_GetPostImg, GetPostImgData);
-                        mArrayList.add(hashMap);
-                        Log.e("test",String.valueOf(mArrayList));
-                    }
-                    if(success){
-                        Toast.makeText(getApplicationContext(),"검색 조회 성공",Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(SearchGetPostActivity.this,SearchGetPostListActivity.class);
-                        intent.putExtra("data",mArrayList);
-                        startActivity(intent);
-                    }else{
-                        Toast.makeText(getApplicationContext(),"검색 조회 실패",Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                } catch (JSONException e) {
-                    Log.e("test","test: catch");
-                    e.printStackTrace();
-                }
-            }
-        };
-        //서버로 Volley 이용해서 요청
-        SearchGetPostRequest searchGetPostRequest = new SearchGetPostRequest( search_category_data, search_color_data, search_local_data,  search_place_data
-                ,  search_date1_data,  search_date2_data, responseListener);
-        RequestQueue queue = Volley.newRequestQueue( SearchGetPostActivity.this );
-        queue.add( searchGetPostRequest );
-
-    }
-    */
 }
