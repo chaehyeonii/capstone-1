@@ -163,12 +163,12 @@ public class LostActivity extends Activity {
                     search_place_data = intent.getStringExtra("search_place_data");  //분실 지역명(장소) lstPlace
                     search_date1_data = intent.getStringExtra("search_date1_data");  //분실물 등록 날짜 START_YMD
                     search_date2_data = intent.getStringExtra("search_date2_data");  //분실물 등록 날짜 END_YMD
-                    Log.i("test", "data:" + search_category_data);
-                    Log.i("test", "data:" + search_color_data);
-                    Log.i("test", "data:" + search_local_data);
-                    Log.i("test", "data:" + search_place_data);
-                    Log.i("test", "data:" + search_date1_data);
-                    Log.i("test", "data:" + search_date2_data);
+                    Log.i("test", "category:" + search_category_data);
+                    Log.i("test", "color:" + search_color_data);
+                    Log.i("test", "local:" + search_local_data);
+                    Log.i("test", "place:" + search_place_data);
+                    Log.i("test", "date1:" + search_date1_data);
+                    Log.i("test", "date2:" + search_date2_data);
 
 
                     SimpleDateFormat date=new SimpleDateFormat("yyyy-mm-dd");
